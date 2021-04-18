@@ -5,8 +5,9 @@ export const LoginWrapper = styled(Row)`
   &.ant-row{
     height: inherit;
     align-items: center;
-    background: rgb(227 228 230);        
+    background: rgb(197 208 230);        
     
+
     .col-wrap{
       z-index: 100;
       border-radius: 32px ;
