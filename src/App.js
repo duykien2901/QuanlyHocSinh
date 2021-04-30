@@ -6,8 +6,8 @@ import MenuAdmin from './component/admin/layout/MenuAdmin';
 
 function App() {
   return (
-    // <LoginPage/>
-    <MenuAdmin/>
+    <LoginPage/>
+    // <MenuAdmin/>
   );
 }
 
