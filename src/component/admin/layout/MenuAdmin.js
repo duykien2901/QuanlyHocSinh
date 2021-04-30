@@ -17,6 +17,8 @@ import {
   faSchool,
   faHammer,
 } from "@fortawesome/free-solid-svg-icons";
+import Home from "../home/Home";
+import { Route, Switch, useRouteMatch } from "react-router";
 // import Timetable from "../component/timetable/Timetable";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -31,7 +33,8 @@ function MenuAdmin() {
   const onPanelChange = (value, mode) => {
     console.log(value.format('YYYY-MM-DD'), mode);
   }
-
+  const {path} = useRouteMatch();
+  console.log(path);
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <SiderWrapper theme="light">
@@ -85,57 +88,11 @@ function MenuAdmin() {
           </Row>
         </HeaderWrapper>
         <ContentWrapper style={{ margin: "0 16px" }}>
+         {/* <Switch>
+           <Route exact path={}}
+           </Route>
+         </Switch> */}
          
-          <div
-            className="site-layout-background"
-            style={{ padding: 24, minHeight: 360, height: "100%" }}
-          >
-            <Row gutter={[50, 50]}>
-              <Col span={6}>
-                <div className="test">
-                  <div className="icon-teacher">
-                    <FontAwesomeIcon icon={faChalkboardTeacher} />
-                  </div>
-                  <div className="count">120</div>
-                  <div className="name">Teacher</div>
-                </div>
-              </Col>
-              <Col span={6}>
-                <div className="test">
-                  <div className="icon-student">
-                    <FontAwesomeIcon icon={faUserGraduate} />
-                  </div>
-                  <div className="count">120</div>
-                  <div className="name">Student</div>
-                </div>
-              </Col>
-              <Col span={6}>
-                <div className="test">
-                  <div className="icon-classroom">
-                    <FontAwesomeIcon icon={faSchool} />
-                  </div>
-                  <div className="count">120</div>
-                  <div className="name">Classroom</div>
-                </div>
-              </Col>
-              <Col span={6}>
-                <div className="test">
-                  <div className="icon-device">
-                    <FontAwesomeIcon icon={faHammer} />
-                  </div>
-                  <div className="count">120</div>
-                  <div className="name">Device</div>
-                </div>
-              </Col>
-            </Row>
-            <Row style={{marginTop: "30px"}}>
-              <Col span={24}>
-                <div className="calendar">
-                  {/* <Timetable/> */}
-                </div>
-              </Col>
-            </Row>
-          </div>
         </ContentWrapper>
         <Footer style={{ textAlign: "center" }}>
           Ant Design ©2018 Created by Ant 
