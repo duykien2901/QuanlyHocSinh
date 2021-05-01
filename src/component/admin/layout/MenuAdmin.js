@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Layout, Menu, Breadcrumb, Avatar, Row, Typography, Col, Calendar } from "antd";
 import {
-  DesktopOutlined,
-  PieChartOutlined,
   ScheduleOutlined,
   HomeOutlined,
   FileOutlined,
@@ -23,18 +21,13 @@ import { Route, Switch, useRouteMatch } from "react-router";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-function MenuAdmin() {
-  const [collapsed, setCollapsed] = useState(false);
-
-  const onCollapse = () => {
-    setCollapsed(!collapsed);
-  };
-
-  const onPanelChange = (value, mode) => {
-    console.log(value.format('YYYY-MM-DD'), mode);
-  }
+function MenuAdmin(props) {
+ 
   const {path} = useRouteMatch();
-  console.log(path);
+
+  const {children} = props;
+  console.log(children);
+  
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <SiderWrapper theme="light">
@@ -92,6 +85,10 @@ function MenuAdmin() {
            <Route exact path={}}
            </Route>
          </Switch> */}
+         {children}
+
+         {/* <Home/> */}
+         
          
         </ContentWrapper>
         <Footer style={{ textAlign: "center" }}>

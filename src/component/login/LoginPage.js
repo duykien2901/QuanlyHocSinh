@@ -1,3 +1,5 @@
+import React from "react";
+import axios from "axios";
 import {
   Col,
   Row,
@@ -15,9 +17,14 @@ import {
   faGoogle,
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
-import React from "react";
+import apis from "../../redux/apis";
 import { LoginWrapper } from "./style";
+import { useDispatch, useSelector } from "react-redux"
+import { loginAction } from "../../redux/actions/auth";
 export default function LoginPage() {
+  const dispacth = useDispatch();
+  const {isLoading} = useSelector(state => state.auth)
+  
   const layout = {
     labelCol: {
       span: 0,
@@ -33,12 +40,17 @@ export default function LoginPage() {
     },
   };
   const onFinish = (values) => {
-    console.log("Success:", values);
+    const data = {
+      username: values.username,
+      password: values.password
+    }
+    dispacth(loginAction(data));
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+  
   return (
     <LoginWrapper>
       <Col span={16} offset={4} className="col-wrap">
@@ -115,7 +127,7 @@ export default function LoginPage() {
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                  <Button type="primary" htmlType="submit">
+                  <Button type="primary" htmlType="submit" loading={isLoading}>
                     Login
                   </Button>
                 </Form.Item>
