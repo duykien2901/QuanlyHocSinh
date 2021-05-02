@@ -16,7 +16,7 @@ import {
   faHammer,
 } from "@fortawesome/free-solid-svg-icons";
 import Home from "../home/Home";
-import { Route, Switch, useRouteMatch } from "react-router";
+import { Route, Switch, useHistory, useRouteMatch } from "react-router";
 // import Timetable from "../component/timetable/Timetable";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -24,9 +24,15 @@ const { SubMenu } = Menu;
 function MenuAdmin(props) {
  
   const {path} = useRouteMatch();
+  const history = useHistory();
 
   const {children} = props;
   console.log(children);
+
+  const onLogout = () => {
+    localStorage.removeItem("token");
+    history.push("/login");
+  }
   
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -74,6 +80,7 @@ function MenuAdmin(props) {
                   paddingLeft: "10px",
                   color: "rgb(255 255 255 / 86%)",
                 }}
+                onClick={onLogout}
               >
                 Logout
               </span>

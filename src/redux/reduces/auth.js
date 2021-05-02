@@ -5,10 +5,12 @@ var intialState = {
     username: "",
     isLoggedIn: false,
     errMessage: "",
-    permission: ""
+    permission: "",
+    id: 0,
 }
 
 var authReducer = (state = intialState, action) => {
+    
     switch(action.type) {
         case LOGIN: 
             return {
@@ -17,13 +19,15 @@ var authReducer = (state = intialState, action) => {
                 isLoggedIn: false
             }
         case LOGIN_SUCCESS:
+            const {token, username, permission, id} = action.payload;
             return {
                 ...state,
                 isLoading: false,
                 isLoggedIn: true,
-                token: action.payload.token,
-                username: action.payload.username,
-                permission: action.payload.permission
+                token,
+                username,
+                permission,
+                id
             }
         case LOGIN_FAILED:
             return {
