@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Route, Switch } from 'react-router'
+import { Redirect, Route, Switch } from 'react-router'
 
 import Loading from "./commom/Loading";
 import PrivateAdminRouter from './commom/PrivateAdminRouter';
@@ -10,6 +10,9 @@ function Routes() {
     return (
         <Suspense fallback={<Loading/>}>
             <Switch>
+                <Route exact path="/">
+                    <Redirect to="/login"/>
+                </Route>
                 <Route component={LoginPage} exact path="/login"/>
 
                 <PrivateAdminRouter component={AdminRoute} path="/admin"/>

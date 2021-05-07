@@ -16,6 +16,11 @@ import {
   faSchool,
   faHammer,
 } from "@fortawesome/free-solid-svg-icons";
+import CalendarHome from './CalendarHome';
+import { Card } from 'antd';
+import ChartSider from "./ChartSider"
+
+const { Meta } = Card;
 export default function Home() {
     return (
         <div
@@ -60,13 +65,18 @@ export default function Home() {
                 </div>
               </Col>
             </Row>
-            <Row style={{marginTop: "30px"}}>
-              <Col span={24}>
+            <Row style={{marginTop: "30px"}} gutter={[40, 40]}>
+              <Col span={16}>
                 <div className="calendar">
-                  {/* <Timetable/> */}
+                 <CalendarHome/>
                 </div>
               </Col>
+             
+              <Col span={8}>
+                <ChartSider/>
+              </Col>
             </Row>
+            
           </div>
     )
 }

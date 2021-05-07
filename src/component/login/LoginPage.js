@@ -59,9 +59,9 @@ function LoginPage() {
     console.log("Failed:", errorInfo);
   };
   
-  return (permisson == "ROLE_ADMIN" ? ( <Redirect to="/admin"/> ) :
-    (permisson == "ROLE_TEACHER" ? (< Redirect to="/teacher"/>) :
-    (permisson == "ROLE_STUDENT" ? (< Redirect to="/student"/>) :
+  return (permisson === "ROLE_ADMIN" ? ( <Redirect to="/admin"/> ) :
+    (permisson === "ROLE_TEACHER" ? (< Redirect to="/teacher"/>) :
+    (permisson === "ROLE_STUDENT" ? (< Redirect to="/student"/>) :
     (
     <LoginWrapper>
     <Col span={16} offset={4} className="col-wrap">

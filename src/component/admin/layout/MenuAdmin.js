@@ -51,7 +51,7 @@ function MenuAdmin(props) {
             </span>
           </Row>
         </div>
-        <Menu defaultSelectedKeys={["1"]} mode="inline">
+        <Menu defaultSelectedKeys={["/admin"]} mode="inline">
           <Menu.Item key="/admin" icon={<HomeOutlined />}>
             Home
           </Menu.Item>
