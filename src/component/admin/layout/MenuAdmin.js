@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Layout, Menu, Breadcrumb, Avatar, Row, Typography, Col, Calendar } from "antd";
+import {
+  Layout,
+  Menu,
+  Breadcrumb,
+  Avatar,
+  Row,
+  Typography,
+  Col,
+  Calendar,
+} from "antd";
 import {
   ScheduleOutlined,
   HomeOutlined,
@@ -17,23 +26,35 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Home from "../home/Home";
 import { Route, Switch, useHistory, useRouteMatch } from "react-router";
-// import Timetable from "../component/timetable/Timetable";
+import { Link } from "react-router-dom";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 function MenuAdmin(props) {
- 
-  const {path} = useRouteMatch();
+  const path = window.location.pathname;
   const history = useHistory();
-
-  const {children} = props;
-  console.log(children);
+  const [key, setKey] = useState(["/timetable"]);
+  const { children } = props;
+  console.log(window.location.pathname.split("/").slice(1));
 
   const onLogout = () => {
     localStorage.removeItem("token");
     history.push("/login");
-  }
-  
+  };
+
+  const onRenderBreadCumb = () => {
+    let items = path.split("/").slice(1);
+    return (
+      <Breadcrumb style={{ margin: "16px 0" }}>
+        {items.map((item) => (
+          <Breadcrumb.Item key={item}>
+            {item.charAt(0).toUpperCase() + item.slice(1)}
+          </Breadcrumb.Item>
+        ))}
+      </Breadcrumb>
+    );
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <SiderWrapper theme="light">
@@ -51,12 +72,12 @@ function MenuAdmin(props) {
             </span>
           </Row>
         </div>
-        <Menu defaultSelectedKeys={["/admin"]} mode="inline">
+        <Menu defaultSelectedKeys={path} mode="inline">
           <Menu.Item key="/admin" icon={<HomeOutlined />}>
-            Home
+            <Link to="/admin">Home</Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<ScheduleOutlined />}>
-            Thời khóa biểu
+          <Menu.Item key="/admin/timetable" icon={<ScheduleOutlined />}>
+            <Link to="/admin/timetable">Timetable</Link>
           </Menu.Item>
           <Menu.Item key="9" icon={<FileOutlined />}>
             Files
@@ -66,11 +87,7 @@ function MenuAdmin(props) {
       <Layout className="site-layout">
         <HeaderWrapper>
           <Row justify="space-between" align="middle">
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Admin</Breadcrumb.Item>
-            <Breadcrumb.Item>Timetable</Breadcrumb.Item>
-            <Breadcrumb.Item>Timetable</Breadcrumb.Item>
-          </Breadcrumb>
+            {onRenderBreadCumb()}
             <div>
               <Avatar size={30}>A</Avatar>
               <span
@@ -87,20 +104,8 @@ function MenuAdmin(props) {
             </div>
           </Row>
         </HeaderWrapper>
-        <ContentWrapper style={{ margin: "0 16px" }}>
-         {/* <Switch>
-           <Route exact path={}}
-           </Route>
-         </Switch> */}
-         {children}
-
-         {/* <Home/> */}
-         
-         
-        </ContentWrapper>
-        <Footer style={{ textAlign: "center" }}>
-          Ant Design ©2018 Created by Ant 
-        </Footer>
+        <ContentWrapper style={{ margin: "0 16px" }}>{children}</ContentWrapper>
+        <Footer style={{ textAlign: "center" }}>Nguyen Dao Duy Kien</Footer>
       </Layout>
     </Layout>
   );

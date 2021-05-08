@@ -2,7 +2,6 @@
 import {LOGIN, LOGIN_FAILED, LOGIN_SUCCESS} from "../constants/action-types";
 import apis from "../apis/index"
 import { notification } from "antd";
-import jwts from "jsonwebtoken";
 import { DecodeJwt } from "../../commom/DecodeJwt";
 
 const loginAction = (data, history) => (dispatch)  => {
@@ -27,11 +26,11 @@ const loginAction = (data, history) => (dispatch)  => {
             duration: 0.5
         })
 
-        if(permission == "ROLE_ADMIN") {
+        if(permission === "ROLE_ADMIN") {
             setTimeout(() => {
                 history.replace("/admin");
             }, 500);
-        }else if(permission == "ROLE_TEACHER") {
+        }else if(permission === "ROLE_TEACHER") {
             setTimeout(() => {
                 history.replace("/teacher");
             }, 500);
