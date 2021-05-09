@@ -18,12 +18,7 @@ import {
 } from "@ant-design/icons";
 import { SiderWrapper, HeaderWrapper, ContentWrapper } from "./MenuStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChalkboardTeacher,
-  faUserGraduate,
-  faSchool,
-  faHammer,
-} from "@fortawesome/free-solid-svg-icons";
+
 import Home from "../home/Home";
 import { Route, Switch, useHistory, useRouteMatch } from "react-router";
 import { Link } from "react-router-dom";
@@ -35,7 +30,6 @@ function MenuAdmin(props) {
   const history = useHistory();
   const [key, setKey] = useState(["/timetable"]);
   const { children } = props;
-  console.log(window.location.pathname.split("/").slice(1));
 
   const onLogout = () => {
     localStorage.removeItem("token");

@@ -7,13 +7,13 @@ import {
 var initialState = {
     list: {
         isLoading: false,
-        timetabes: [],
+        timetables: [],
         message: "",
         total: 0,
     }
 }
 
-var timetablesReducer = (state = initialState, action) => dispatch => {
+var timetablesReducer = (state = initialState, action) => {
     switch(action.type) {
         case FETCH_TIMETABLES:
             return {
@@ -29,6 +29,7 @@ var timetablesReducer = (state = initialState, action) => dispatch => {
                 ...state,
                 list: {
                     ...state.list,
+                    timetables: action.payload.data,
                     message: "Success",
                     isLoading: false
                 }
