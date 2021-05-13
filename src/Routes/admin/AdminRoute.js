@@ -18,6 +18,7 @@ function AdminRoute() {
                     <Route component={Home} exact path={`${path}`}/>
                     <Route component={Timetable} exact path={`${path}/timetable`}/>
                     <Route component={TimetableChange} exact path={`${path}/timetable/:change/:id`}/>
+                    <Route component={TimetableChange} exact path={`${path}/timetable/:change`}/>
                 </Switch>
             </Suspense>
         </MenuAdmin>

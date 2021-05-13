@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Layout,
   Menu,
@@ -22,20 +22,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Home from "../home/Home";
 import { Route, Switch, useHistory, useRouteMatch } from "react-router";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { filterTimetable } from "../../../redux/actions";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 function MenuAdmin(props) {
   const path = window.location.pathname;
+  const dispatch = useDispatch();
   const history = useHistory();
   const [key, setKey] = useState(["/timetable"]);
   const { children } = props;
+
+  useEffect(() => {
+    dispatch(filterTimetable());
+  }, []);
 
   const onLogout = () => {
     localStorage.removeItem("token");
     history.push("/login");
   };
-
+  console.log("ss");
   const onRenderBreadCumb = () => {
     let items = path.split("/").slice(1);
     return (

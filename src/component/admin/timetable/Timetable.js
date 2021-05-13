@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Table, Tag, Space } from "antd";
+import { Table, Tag, Space, Button } from "antd";
 import apis from "../../../redux/apis";
-import { getTimetable } from "../../../redux/actions/timtable";
+import { getTimetable, deleleTimetable, deleteTimetable } from "../../../redux/actions/timtable";
 import { Link, useRouteMatch } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import Loading from "../../../commom/Loading";
@@ -10,6 +10,7 @@ import Loading from "../../../commom/Loading";
 const { Column, ColumnGroup } = Table;
 
 function Timetable() {
+  const [isLoadding, setIsLoadding] = useState(false);
   const { path } = useRouteMatch();
 
   const dispatch = useDispatch();
@@ -21,15 +22,16 @@ function Timetable() {
   });
 
   useEffect(() => {
-    dispatch(getTimetable());
+    // dispatch(getTimetable());
   }, []);
 
-  const onClick = () => {
-    dispatch(getTimetable());
+ 
 
-    console.log(dataSource);
-  };
-
+  const onDelete = (id) => {
+    let newTimetables = dataSource.timetables.filter((item) => item.id !== id);
+    dispatch(deleteTimetable(id, newTimetables));
+  }
+  console.log("re-render");
   return (
     <div
       className="site-layout-background"
@@ -37,12 +39,15 @@ function Timetable() {
         margin: "24px",
         minHeight: 360,
         height: "100%",
-        display: "flex",
-        alignContent: "center",
-        flexDirection: "column",
+        // display: "flex",
+        // alignContent: "center",
+        // flexDirection: "column",
         backgroundColor: "#fff",
       }}
     >
+      <Link to={`${path}/add`}>
+        <Button type="primary">Add</Button>
+      </Link>
       {dataSource.isLoading ? (
         <Loading />
       ) : (
@@ -60,8 +65,12 @@ function Timetable() {
             render={(text, record) => {
               return (
                 <Space size="middle">
-                  <Link to={`${path}/edit/${record.id}`}>Edit</Link>
-                  <a>Delete</a>
+                  <Link to={`${path}/edit/${record.id}`}>
+                    <Button type="primary" ghost>
+                      Edit
+                    </Button>
+                  </Link>
+                  <Button danger onClick={() => onDelete(record.id)}>Delete</Button>
                 </Space>
               );
             }}

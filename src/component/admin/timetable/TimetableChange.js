@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Col, Row, Form, Input, InputNumber, Button, Select } from "antd";
+import { Col, Row, Form, Input, Button, Select } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
-import { getListTeacher } from "../../../redux/actions/teacher";
+import { useHistory, useParams } from "react-router";
 import { TimetableChangeWrapper } from "./style";
 
 const layout = {
@@ -18,50 +17,63 @@ const layout = {
 
 const validateMessages = {
   required: "${label} is required!",
-  types: {
-    email: "${label} is not a valid email!",
-    number: "${label} is not a number!",
-  },
-  number: {
-    range: "${label} must be between ${min} and ${max}",
-  },
 };
 
 function TimetableChange() {
   const { change } = useParams();
+  const [isDefaulTeacher, setIsDefaulTeacher] = useState(true);
+  const [isDefaulClass, setIsDefaulClass] = useState(true);
+  const [isDefaulSubject, setIsDefaulSubject] = useState(true);
+
+  const [isAddingScreen, setIsAddingScreen] = useState(
+    change === "add" ? true : false
+  );
+
   const { id } = useParams();
-  console.log("idParam => ", id);
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const timetableState = useSelector(
     (state) => state.timetables.list.timetables
   );
-  const teacherState = useSelector((state) => state.teachers.list);
-  const classState = useSelector((state) => state.classes.list);
-  const courseState = useSelector((state) => state.courses.list);
+  const teacherState = useSelector((state) => state.teachers.list.listTeacher);
+  const classState = useSelector((state) => state.classes.list.listClass);
+  const courseState = useSelector((state) => state.courses.list.listCourse);
 
-  const timetableDefault = timetableState.find((item) => {
-    return item.id === parseInt(id);
-  });
-
-  const defaultTeacher = teacherState.listTeacher.find((item) => {
-    return item.id === timetableDefault?.teacherId;
-  });
-
-  console.log(defaultTeacher);
-
-  useEffect(() => {
-    dispatch(getListTeacher());
-  }, []);
+  const timetableDefault = isAddingScreen
+    ? null
+    : timetableState.find((item) => {
+        return item.id === parseInt(id);
+      });
+ 
 
   const onFinish = (values) => {
+    if (isDefaulClass) values.classroomId = timetableDefault.classroomId;
+    if (isDefaulSubject) values.courseId = timetableDefault.courseId;
+    if (isDefaulTeacher) values.teacherId = timetableDefault.teacherId;
+    values.shift = parseInt(values.shift);
+    values.dayOfWeek = parseInt(values.dayOfWeek);
     console.log(values);
   };
 
+  const onChange = (e, option) => {
+    option.key.includes("Teacher")
+      ? setIsDefaulTeacher(false)
+      : option.key.includes("Class")
+      ? setIsDefaulClass(false)
+      : setIsDefaulSubject(false);
+  };
+
+  const onGoBack = () => {
+    history.goBack();
+  };
   return (
     <TimetableChangeWrapper>
+      <Button onClick={onGoBack}>Back</Button>
       <Col span={16} offset={4}>
-        <Row>Sửa thời khóa biểu</Row>
+        <Row>
+          {change === "add" ? "Thêm thời khóa biểu" : "Sửa thời khóa biểu"}
+        </Row>
         <Form
           {...layout}
           name="nest-messages"
@@ -69,58 +81,117 @@ function TimetableChange() {
           validateMessages={validateMessages}
           layout="vertical"
         >
-          <Form.Item
+          {isAddingScreen ? null :<Form.Item
             name="id"
             label="Id"
+            initialValue={timetableDefault?.id}
             rules={[
               {
                 required: true,
               },
             ]}
           >
-            <Input defaultValue={id} disabled/>
-          </Form.Item>
+            <Input disabled />
+          </Form.Item>}
+
           <Form.Item
-            name="teacherName"
+            name="teacherId"
             label="Teacher"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            initialValue={isAddingScreen ? null : `${timetableDefault?.teacherName} - ${timetableDefault?.teacherId}`}
           >
-            <Select defaultValue={defaultTeacher?.teacherName}>
-              {teacherState.listTeacher.map((teacher) => {
+            <Select onChange={onChange}>
+              {teacherState.map((teacher) => {
                 return (
-                  <Select.Option key={teacher.id}>
-                    {teacher?.teacherName}
+                  <Select.Option
+                    key={`Teacher ${teacher?.id}`}
+                    value={teacher?.id}
+                  >
+                    {`${teacher?.teacherName} - ${teacher?.id}`}
                   </Select.Option>
                 );
               })}
             </Select>
           </Form.Item>
+
           <Form.Item
-            name={["user", "age"]}
-            label="Age"
+            name="classroomId"
+            label="Classroom"
+            initialValue={timetableDefault?.className}
+          >
+            <Select onChange={onChange}>
+              {classState.map((classroom) => {
+                return (
+                  <Select.Option
+                    key={`Class ${classroom.id}`}
+                    value={classroom?.id}
+                  >
+                    {classroom?.classroomName}
+                  </Select.Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="courseId"
+            label="Subject"
+            initialValue={timetableDefault?.courseName}
+          >
+            <Select onChange={onChange}>
+              {courseState.map((course) => {
+                return (
+                  <Select.Option
+                    onChange={onChange}
+                    key={`Course ${course.id}`}
+                    value={course?.id}
+                  >
+                    {course?.courseName}
+                  </Select.Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="shift"
+            label="Shift"
+            initialValue={timetableDefault?.shift}
             rules={[
               {
-                type: "number",
-                min: 0,
-                max: 99,
+                required: true,
+              },
+              {
+                validator(_, values) {
+                  if (isNaN(values)) {
+                    return Promise.reject("Not a number");
+                  }
+                  if (values <= 0 || values >= 8) {
+                    return Promise.reject("Incorrect shift");
+                  }
+                  return Promise.resolve();
+                },
               },
             ]}
           >
-            <InputNumber />
-          </Form.Item>
-          <Form.Item name={["user", "website"]} label="Website">
             <Input />
           </Form.Item>
-          <Form.Item name={["user", "introduction"]} label="Introduction">
-            <Input.TextArea />
+
+          <Form.Item
+            name="dayOfWeek"
+            label="Day Of Week"
+            initialValue={timetableDefault?.dayOfWeek}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
           </Form.Item>
+
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
             <Button type="primary" htmlType="submit">
-              Submit
+              {isAddingScreen ? "Add Timetable" : "Change Timetable"}
             </Button>
           </Form.Item>
         </Form>
