@@ -9,8 +9,8 @@ export default {
     return axios.post("/api/login", data);
   },
 
-  getTimetable: () => {
-    return axios.get("/api/timetable/all", configHeader);
+  getTimetable: (page, pageSize) => {
+    return axios.get(`/api/timetable/page?page=${page-1}&pageSize=${pageSize}`, configHeader);
   },
 
   getTeacherList: () => {

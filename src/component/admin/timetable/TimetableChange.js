@@ -45,7 +45,12 @@ function TimetableChange() {
     : timetableState.find((item) => {
         return item.id === parseInt(id);
       });
- 
+
+  useEffect(() => {
+    if(timetableDefault === undefined) {
+      history.push("/admin/timetable");
+    }
+  }, [])
 
   const onFinish = (values) => {
     if (isDefaulClass) values.classroomId = timetableDefault.classroomId;
@@ -53,7 +58,6 @@ function TimetableChange() {
     if (isDefaulTeacher) values.teacherId = timetableDefault.teacherId;
     values.shift = parseInt(values.shift);
     values.dayOfWeek = parseInt(values.dayOfWeek);
-    console.log(values);
   };
 
   const onChange = (e, option) => {
@@ -81,23 +85,29 @@ function TimetableChange() {
           validateMessages={validateMessages}
           layout="vertical"
         >
-          {isAddingScreen ? null :<Form.Item
-            name="id"
-            label="Id"
-            initialValue={timetableDefault?.id}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input disabled />
-          </Form.Item>}
+          {isAddingScreen ? null : (
+            <Form.Item
+              name="id"
+              label="Id"
+              initialValue={timetableDefault?.id}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input disabled />
+            </Form.Item>
+          )}
 
           <Form.Item
             name="teacherId"
             label="Teacher"
-            initialValue={isAddingScreen ? null : `${timetableDefault?.teacherName} - ${timetableDefault?.teacherId}`}
+            initialValue={
+              isAddingScreen
+                ? null
+                : `${timetableDefault?.teacherName} - ${timetableDefault?.teacherId}`
+            }
           >
             <Select onChange={onChange}>
               {teacherState.map((teacher) => {
