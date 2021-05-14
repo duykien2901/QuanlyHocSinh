@@ -27,6 +27,14 @@ function Timetable() {
     item.key = item.id;
     return item;
   });
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8eaf0d8... push code
+=======
+
+>>>>>>> 8eaf0d8... push code
 
 
   useEffect(() => {
