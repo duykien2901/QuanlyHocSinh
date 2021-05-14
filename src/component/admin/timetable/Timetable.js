@@ -27,10 +27,7 @@ function Timetable() {
     item.key = item.id;
     return item;
   });
-  // useEffect(() => {
-  //   console.log("render");
-  //   dispatch(getTimetable(current, pageSize));
-  // }, []);
+
 
   useEffect(() => {
     dispatch(getTimetable(current, pageSize));
