@@ -8,15 +8,16 @@ import {
   DELETE_TIMETABLES_SUCCESS,
 } from "../constants/action-types";
 
-const getTimetable = () => (dispatch) => {
+const getTimetable = (page, pageSize) => (dispatch) => {
   dispatch({ type: FETCH_TIMETABLES });
   apis
-    .getTimetable()
+    .getTimetable(page, pageSize)
     .then((res) => {
       dispatch({
         type: FETCH_TIMETABLES_SUCCESS,
         payload: {
-          data: res.data,
+          data: res.data.data,
+          total: res.data.total
         },
       });
     })

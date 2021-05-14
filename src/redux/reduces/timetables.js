@@ -33,6 +33,7 @@ var timetablesReducer = (state = initialState, action) => {
         list: {
           ...state.list,
           timetables: action.payload.data,
+          total: action.payload.total,
           message: "Success",
           isLoading: false,
         },
