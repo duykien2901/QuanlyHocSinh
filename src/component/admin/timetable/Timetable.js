@@ -20,6 +20,10 @@ function Timetable() {
     item.key = item.id;
     return item;
   });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8eaf0d8... push code
 
   useEffect(() => {
     // dispatch(getTimetable());
