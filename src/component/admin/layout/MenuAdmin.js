@@ -9,13 +9,13 @@ import {
   Col,
   Calendar,
 } from "antd";
+import { ScheduleOutlined, HomeOutlined } from "@ant-design/icons";
 import {
-  ScheduleOutlined,
-  HomeOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+  faChalkboardTeacher,
+  faUserGraduate,
+  faSchool,
+  faHammer,
+} from "@fortawesome/free-solid-svg-icons";
 import { SiderWrapper, HeaderWrapper, ContentWrapper } from "./MenuStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -42,7 +42,7 @@ function MenuAdmin(props) {
     localStorage.removeItem("token");
     history.push("/login");
   };
-  console.log("ss");
+
   const onRenderBreadCumb = () => {
     let items = path.split("/").slice(1);
     return (
@@ -54,6 +54,15 @@ function MenuAdmin(props) {
         ))}
       </Breadcrumb>
     );
+  };
+
+  const onRenderDefaultKeyMenu = () => {
+    let defaultKey = path.includes("/admin/timetable")
+      ? "/admin/timetable"
+      : path.includes("/admin/device")
+      ? "/admin/device"
+      : "/admin";
+    return defaultKey;
   };
 
   return (
@@ -73,15 +82,22 @@ function MenuAdmin(props) {
             </span>
           </Row>
         </div>
-        <Menu defaultSelectedKeys={path} mode="inline">
+        <Menu
+          defaultSelectedKeys={onRenderDefaultKeyMenu()}
+          mode="inline"
+          key={key}
+        >
           <Menu.Item key="/admin" icon={<HomeOutlined />}>
             <Link to="/admin">Home</Link>
           </Menu.Item>
-          <Menu.Item key="/admin/timetable" icon={<ScheduleOutlined />}>
+          <Menu.Item key={"/admin/timetable"} icon={<ScheduleOutlined />}>
             <Link to="/admin/timetable">Timetable</Link>
           </Menu.Item>
-          <Menu.Item key="9" icon={<FileOutlined />}>
-            Files
+          <Menu.Item
+            key="/admin/device"
+            icon={<FontAwesomeIcon icon={faHammer} />}
+          >
+            <Link to="/admin/device">Devices</Link>
           </Menu.Item>
         </Menu>
       </SiderWrapper>

@@ -5,6 +5,8 @@ import { Col, Row, Form, Input, Button, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { TimetableChangeWrapper } from "./style";
+import apis from "../../../redux/apis";
+import { addTimetable, changeTimetable} from "../../../redux/actions/timtable";
 
 const layout = {
   labelCol: {
@@ -24,6 +26,7 @@ function TimetableChange() {
   const [isDefaulTeacher, setIsDefaulTeacher] = useState(true);
   const [isDefaulClass, setIsDefaulClass] = useState(true);
   const [isDefaulSubject, setIsDefaulSubject] = useState(true);
+  const [refesh, setRefesh] = useState(null);
 
   const [isAddingScreen, setIsAddingScreen] = useState(
     change === "add" ? true : false
@@ -47,17 +50,25 @@ function TimetableChange() {
       });
 
   useEffect(() => {
-    if(timetableDefault === undefined) {
+    if (timetableDefault === undefined) {
       history.push("/admin/timetable");
     }
-  }, [])
+  }, []);
 
   const onFinish = (values) => {
+    // if not change, set default values when submit
     if (isDefaulClass) values.classroomId = timetableDefault.classroomId;
     if (isDefaulSubject) values.courseId = timetableDefault.courseId;
     if (isDefaulTeacher) values.teacherId = timetableDefault.teacherId;
+
     values.shift = parseInt(values.shift);
     values.dayOfWeek = parseInt(values.dayOfWeek);
+    if (isAddingScreen) {
+      addTimetable(values);
+    } else {
+      delete values.id;
+      changeTimetable(parseInt(id), values);
+    }
   };
 
   const onChange = (e, option) => {
@@ -103,11 +114,17 @@ function TimetableChange() {
           <Form.Item
             name="teacherId"
             label="Teacher"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
             initialValue={
               isAddingScreen
-                ? null
+                ? refesh
                 : `${timetableDefault?.teacherName} - ${timetableDefault?.teacherId}`
             }
+            
           >
             <Select onChange={onChange}>
               {teacherState.map((teacher) => {
@@ -126,6 +143,11 @@ function TimetableChange() {
           <Form.Item
             name="classroomId"
             label="Classroom"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
             initialValue={timetableDefault?.className}
           >
             <Select onChange={onChange}>
@@ -145,6 +167,11 @@ function TimetableChange() {
           <Form.Item
             name="courseId"
             label="Subject"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
             initialValue={timetableDefault?.courseName}
           >
             <Select onChange={onChange}>

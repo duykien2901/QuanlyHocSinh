@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Tag, Space, Button, Popconfirm, Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import apis from "../../../redux/apis";
 import {
   getTimetable,
   deleleTimetable,
   deleteTimetable,
+  searchTimetable,
+  searchTimetableDetails,
 } from "../../../redux/actions/timtable";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import swal from "sweetalert";
+import Search from "antd/lib/transfer/search";
 
 const { Column } = Table;
 
@@ -16,7 +20,12 @@ function Timetable() {
   const [isLoadding, setIsLoadding] = useState(false);
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-
+  const [valueSearch, setValueSearch] = useState("");
+  const [searchDetals, setSearchDetails] = useState({
+    className: "",
+    teacherName: "",
+    courseName: "",
+  });
   const { path } = useRouteMatch();
   const history = useHistory();
 
@@ -28,10 +37,67 @@ function Timetable() {
     return item;
   });
 
-
   useEffect(() => {
-    dispatch(getTimetable(current, pageSize));
-  }, [current, pageSize]);
+    dispatch(searchTimetableDetails(current, pageSize, searchDetals));
+  }, [dispatch, current, pageSize, searchDetals]);
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ marginBottom: 8, display: "block" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => handleReset(clearFilters, selectedKeys, dataIndex)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+  });
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    setSearchDetails((searchDetals) => ({
+      ...searchDetals,
+      [dataIndex]: selectedKeys[0] ? selectedKeys[0] : "",
+    }));
+    confirm();
+  };
+
+  const handleReset = (clearFilters, selectedKeys, dataIndex) => {
+    clearFilters();
+    setSearchDetails((searchDetals) => ({
+      ...searchDetals,
+      [dataIndex]: "",
+    }));
+  };
 
   const onDelete = (id) => {
     let newTimetables = dataSource.timetables.filter((item) => item.id !== id);
@@ -59,8 +125,8 @@ function Timetable() {
   };
 
   const onSearch = (value) => {
-    console.log(value);
-  }
+    setValueSearch(value);
+  };
   return (
     <div
       className="site-layout-background"
@@ -77,11 +143,6 @@ function Timetable() {
       <Link to={`${path}/add`}>
         <Button type="primary">Add</Button>
       </Link>
-      <Input.Search
-        placeholder="input search text"
-        onSearch={onSearch}
-        style={{ width: 200 }}
-      />
       <Table
         dataSource={data}
         loading={dataSource.isLoading}
@@ -97,9 +158,24 @@ function Timetable() {
         }}
       >
         <Column title="Id" dataIndex="id" key="id" />
-        <Column title="Classroom" dataIndex="className" key="className" />
-        <Column title="Teacher" dataIndex="teacherName" key="teacherName" />
-        <Column title="Subject" dataIndex="courseName" key="courseName" />
+        <Column
+          title="Classroom"
+          dataIndex="className"
+          key="className"
+          {...getColumnSearchProps("className")}
+        />
+        <Column
+          title="Teacher"
+          dataIndex="teacherName"
+          key="teacherName"
+          {...getColumnSearchProps("teacherName")}
+        />
+        <Column
+          title="Subject"
+          dataIndex="courseName"
+          key="courseName"
+          {...getColumnSearchProps("courseName")}
+        />
         <Column title="Day of Week" dataIndex="dayOfWeek" key="dayOfWeek" />
         <Column title="Shift" dataIndex="shift" key="shift" />
 

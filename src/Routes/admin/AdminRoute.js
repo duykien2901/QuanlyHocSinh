@@ -8,6 +8,7 @@ import MenuAdmin from '../../component/admin/layout/MenuAdmin';
 const Home = lazy(() => import("../../component/admin/home/Home"));
 const Timetable = lazy(() => import("../../component/admin/timetable/Timetable"));
 const TimetableChange = lazy(() => import("../../component/admin/timetable/TimetableChange"));
+const Device =  lazy(() => import('../../component/admin/devices/Device'));
 function AdminRoute() {
     const {path} = useRouteMatch();
 
@@ -19,6 +20,8 @@ function AdminRoute() {
                     <Route component={Timetable} exact path={`${path}/timetable`}/>
                     <Route component={TimetableChange} exact path={`${path}/timetable/:change/:id`}/>
                     <Route component={TimetableChange} exact path={`${path}/timetable/:change`}/>
+                    <Route component={Device} exact path={`${path}/device`}/>
+                    
                 </Switch>
             </Suspense>
         </MenuAdmin>
