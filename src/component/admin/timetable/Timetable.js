@@ -134,9 +134,6 @@ function Timetable() {
         margin: "24px",
         minHeight: 360,
         height: "100%",
-        // display: "flex",
-        // alignContent: "center",
-        // flexDirection: "column",
         backgroundColor: "#fff",
       }}
     >

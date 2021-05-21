@@ -1,4 +1,3 @@
-
 import apis from "../apis";
 import {
   FETCH_COURSE,
@@ -10,7 +9,7 @@ const getCourseList = () => (dispatch) => {
   dispatch({
     type: FETCH_COURSE,
   });
-  apis
+  apis.course
     .getCourseList()
     .then((res) => {
       dispatch({

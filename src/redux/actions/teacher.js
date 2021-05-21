@@ -7,7 +7,7 @@ import {
 
 const getListTeacher = () => (dispatch) => {
   dispatch({ type: FETCH_TEACHER });
-  apis.getTeacherList().then((res) => {
+  apis.teacher.getTeacherList().then((res) => {
     dispatch({
       type: FETCH_TEACHER_SUCCESS,
       payload: {

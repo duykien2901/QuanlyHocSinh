@@ -12,6 +12,7 @@ import {
 const getTimetable = (page, pageSize) => (dispatch) => {
   dispatch({ type: FETCH_TIMETABLES });
   apis
+    .timetable
     .getTimetable(page, pageSize)
     .then((res) => {
       dispatch({
@@ -31,6 +32,7 @@ const getTimetable = (page, pageSize) => (dispatch) => {
 
 const addTimetable = (data) => {
   apis
+    .timetable
     .addTimetable(data)
     .then((res) => {
       notification.success({
@@ -48,6 +50,7 @@ const addTimetable = (data) => {
 
 const deleteTimetable = (id, newTimetable) => (dispatch) => {
   apis
+    .timetable
     .deleteTimetable(id)
     .then((res) => {
       dispatch({
@@ -68,6 +71,7 @@ const deleteTimetable = (id, newTimetable) => (dispatch) => {
 
 const changeTimetable = (id, data) => {
   apis
+    .timetable
     .changeTimetable(id, data)
     .then((res) => {
       notification.success({
@@ -86,6 +90,7 @@ const changeTimetable = (id, data) => {
 const searchTimetable = (page, pageSize, value) => (dispatch) => {
   dispatch({ type: FETCH_TIMETABLES });
   apis
+    .timetable
     .searchTimetable(page, pageSize, value)
     .then((res) => {
       dispatch({
@@ -106,6 +111,7 @@ const searchTimetable = (page, pageSize, value) => (dispatch) => {
 const searchTimetableDetails = (page, pageSize, value) => (dispatch) => {
   dispatch({ type: FETCH_TIMETABLES });
   apis
+    .timetable
     .searchTimetableDetails(page, pageSize, value)
     .then((res) => {
       dispatch({

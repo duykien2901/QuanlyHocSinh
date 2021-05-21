@@ -10,6 +10,7 @@ const getClassroomList = () => (dispatch) => {
     type: FETCH_CLASS,
   });
   apis
+    .classroom
     .getClassroomList()
     .then((res) => {
       dispatch({

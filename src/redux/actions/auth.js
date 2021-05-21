@@ -6,7 +6,7 @@ import { DecodeJwt } from "../../commom/DecodeJwt";
 const loginAction = (data, history) => (dispatch) => {
   dispatch({ type: LOGIN });
 
-  apis
+  apis.auth
     .login(data)
     .then((res) => {
       const { jwt: token } = res.data;
