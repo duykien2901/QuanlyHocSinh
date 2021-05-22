@@ -154,29 +154,38 @@ function Timetable() {
           onChange: onPageChange,
         }}
       >
-        <Column title="Id" dataIndex="id" key="id" />
+        <Column align="center" title="Id" dataIndex="id" key="id" />
         <Column
+          align="center"
           title="Classroom"
           dataIndex="className"
           key="className"
           {...getColumnSearchProps("className")}
         />
         <Column
+          align="center"
           title="Teacher"
           dataIndex="teacherName"
           key="teacherName"
           {...getColumnSearchProps("teacherName")}
         />
         <Column
+          align="center"
           title="Subject"
           dataIndex="courseName"
           key="courseName"
           {...getColumnSearchProps("courseName")}
         />
-        <Column title="Day of Week" dataIndex="dayOfWeek" key="dayOfWeek" />
-        <Column title="Shift" dataIndex="shift" key="shift" />
+        <Column
+          align="center"
+          title="Day of Week"
+          dataIndex="dayOfWeek"
+          key="dayOfWeek"
+        />
+        <Column align="center" title="Shift" dataIndex="shift" key="shift" />
 
         <Column
+          align="center"
           title="Action"
           key="action"
           render={(text, record) => {
