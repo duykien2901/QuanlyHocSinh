@@ -8,7 +8,7 @@ function PersonBorrowDevice({ id }) {
 
   const findDatasourse = () => {
     let dataSource = deviceList.devices.find((item) => item.id === id);
-    return dataSource.personBorrowDevice.map((item) => {
+    return dataSource?.personBorrowDevice.map((item) => {
       item.key = item.id;
       return item;
     });

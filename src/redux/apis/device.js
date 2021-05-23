@@ -13,4 +13,18 @@ export default {
       configHeader
     );
   },
+  getPageDeviceSorting: (page, pageSize, sort) => {
+    return axios.get(
+      `/api/device/pageSort?page=${page - 1}&pageSize=${pageSize}&sort=${sort}`,
+      configHeader
+    );
+  },
+
+  addDevice: (value) => {
+    return axios.post("/api/device/add", value, configHeader);
+  },
+
+  changeDevice: (value, id) => {
+    return axios.put(`/api/device/${id}`, value, configHeader);
+  },
 };

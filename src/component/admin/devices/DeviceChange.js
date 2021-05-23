@@ -1,7 +1,7 @@
 import { Input, Form, Button, Select } from "antd";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useState } from "react/cjs/react.development";
+import { useDispatch, useSelector } from "react-redux";
+import { addDevice, changeDevice } from "../../../redux/actions/device";
 import { ADD_SCREEN, EDIT_SCREEN } from "./constant";
 
 const layout = {
@@ -25,11 +25,29 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-function DeviceChange({ screen, deviceId }) {
+function DeviceChange({ screen, deviceId, resetDeviceField, onCloseModal }) {
   const listDevice = useSelector((state) => state.devices.list);
+  const dispatch = useDispatch();
 
-  const onFinish = (values) => {
-    console.log("onFinish ", values);
+  const onFinish = async (values) => {
+    if (screen === ADD_SCREEN) {
+      const add = new Promise((resolve, reject) => {
+        dispatch(addDevice(values, resolve, reject));
+      });
+      form.setFieldsValue({
+        deviceName: "",
+        status: "",
+      });
+      await add;
+      resetDeviceField();
+    } else {
+      const change = new Promise((resolve, reject) => {
+        dispatch(changeDevice(values, deviceId, resolve, reject));
+      })
+      await change;
+      resetDeviceField();
+      // onCloseModal();
+    }
   };
 
   const [form] = Form.useForm(); // custom field default

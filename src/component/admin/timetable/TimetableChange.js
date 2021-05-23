@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { TimetableChangeWrapper } from "./style";
 import apis from "../../../redux/apis";
-import { addTimetable, changeTimetable} from "../../../redux/actions/timtable";
+import { addTimetable, changeTimetable } from "../../../redux/actions/timtable";
 
 const layout = {
   labelCol: {
@@ -43,6 +43,8 @@ function TimetableChange() {
   const classState = useSelector((state) => state.classes.list.listClass);
   const courseState = useSelector((state) => state.courses.list.listCourse);
 
+  const [form] = Form.useForm();
+
   const timetableDefault = isAddingScreen
     ? null
     : timetableState.find((item) => {
@@ -55,6 +57,18 @@ function TimetableChange() {
     }
   }, []);
 
+  useEffect(() => {
+    change !== "add" &&
+      form.setFieldsValue({
+        id: timetableDefault?.id,
+        teacherId: `${timetableDefault?.teacherName} - ${timetableDefault?.teacherId}`,
+        classroomId: timetableDefault.className,
+        courseId: timetableDefault.courseName,
+        shift: timetableDefault.shift,
+        dayOfWeek: timetableDefault.dayOfWeek,
+      });
+  }, [id]);
+
   const onFinish = (values) => {
     // if not change, set default values when submit
     if (isDefaulClass) values.classroomId = timetableDefault.classroomId;
@@ -65,9 +79,18 @@ function TimetableChange() {
     values.dayOfWeek = parseInt(values.dayOfWeek);
     if (isAddingScreen) {
       addTimetable(values);
+      form.setFieldsValue({
+        id: "",
+        teacherId: "",
+        classroomId: "",
+        courseId: "",
+        shift: "",
+        dayOfWeek: "",
+      })
     } else {
       delete values.id;
       changeTimetable(parseInt(id), values);
+    
     }
   };
 
@@ -91,6 +114,7 @@ function TimetableChange() {
         </Row>
         <Form
           {...layout}
+          form={form}
           name="nest-messages"
           onFinish={onFinish}
           validateMessages={validateMessages}
@@ -100,7 +124,7 @@ function TimetableChange() {
             <Form.Item
               name="id"
               label="Id"
-              initialValue={timetableDefault?.id}
+              // initialValue={timetableDefault?.id}
               rules={[
                 {
                   required: true,
@@ -119,12 +143,11 @@ function TimetableChange() {
                 required: true,
               },
             ]}
-            initialValue={
-              isAddingScreen
-                ? refesh
-                : `${timetableDefault?.teacherName} - ${timetableDefault?.teacherId}`
-            }
-            
+            // initialValue={
+            //   isAddingScreen
+            //     ? refesh
+            //     : `${timetableDefault?.teacherName} - ${timetableDefault?.teacherId}`
+            // }
           >
             <Select onChange={onChange}>
               {teacherState.map((teacher) => {
@@ -148,7 +171,7 @@ function TimetableChange() {
                 required: true,
               },
             ]}
-            initialValue={timetableDefault?.className}
+            // initialValue={timetableDefault?.className}
           >
             <Select onChange={onChange}>
               {classState.map((classroom) => {
@@ -172,7 +195,7 @@ function TimetableChange() {
                 required: true,
               },
             ]}
-            initialValue={timetableDefault?.courseName}
+            // initialValue={timetableDefault?.courseName}
           >
             <Select onChange={onChange}>
               {courseState.map((course) => {
@@ -192,7 +215,7 @@ function TimetableChange() {
           <Form.Item
             name="shift"
             label="Shift"
-            initialValue={timetableDefault?.shift}
+            // initialValue={timetableDefault?.shift}
             rules={[
               {
                 required: true,
@@ -216,7 +239,7 @@ function TimetableChange() {
           <Form.Item
             name="dayOfWeek"
             label="Day Of Week"
-            initialValue={timetableDefault?.dayOfWeek}
+            // initialValue={timetableDefault?.dayOfWeek}
             rules={[
               {
                 required: true,

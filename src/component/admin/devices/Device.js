@@ -4,7 +4,10 @@ import Column from "antd/lib/table/Column";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
-import { getPageDevice } from "../../../redux/actions/device";
+import {
+  getPageDevice,
+  getPageDeviceSorting,
+} from "../../../redux/actions/device";
 import { ADD_SCREEN, BORROW_SCREEN, EDIT_SCREEN } from "./constant";
 import DeviceChange from "./DeviceChange";
 import PersonBorrowDevice from "./PersonBorrowDevice";
@@ -37,6 +40,13 @@ function Device() {
     setPageSize(pageSize);
   };
 
+  const onTableChange = (pagination, filters, sorter) => {
+    let sort = sorter.order === "ascend" ? true : false;
+    sorter.order
+      ? dispatch(getPageDeviceSorting(currentPage, pageSize, sort))
+      : dispatch(getPageDevice(currentPage, pageSize));
+  };
+
   const onShowPersonBorrow = (id) => {
     setOnShowModalBorrow(true);
     setOnScreen(BORROW_SCREEN);
@@ -52,6 +62,15 @@ function Device() {
     setOnShowModalBorrow(true);
     setOnScreen(EDIT_SCREEN);
     setModalBorrowId(id);
+  };
+
+  const resetDeviceField = () => {
+    dispatch(getPageDevice(currentPage, pageSize));
+    onCloseModalAfterUpdate();
+  };
+
+  const onCloseModalAfterUpdate = () => {
+    setOnShowModalBorrow(false);
   };
 
   return (
@@ -77,10 +96,20 @@ function Device() {
           <PersonBorrowDevice id={modalBorrowId} />
         )}
 
-        {onScreen === ADD_SCREEN && <DeviceChange screen={onScreen} />}
+        {onScreen === ADD_SCREEN && (
+          <DeviceChange
+            screen={onScreen}
+            resetDeviceField={resetDeviceField}
+            onCloseModal={onCloseModalAfterUpdate}
+          />
+        )}
 
         {onScreen === EDIT_SCREEN && (
-          <DeviceChange screen={onScreen} deviceId={modalBorrowId} />
+          <DeviceChange
+            screen={onScreen}
+            deviceId={modalBorrowId}
+            resetDeviceField={resetDeviceField}
+          />
         )}
       </Modal>
 
@@ -96,10 +125,11 @@ function Device() {
           defaultCurrent: currentPage,
           defaultPageSize: pageSize,
           pageSizeOptions: [5, 10, 15],
-          total: dataSource.total,
+          total: devices.total,
           showSizeChanger: true,
           onChange: onPageChange,
         }}
+        onChange={onTableChange}
       >
         <Column align="center" title="Id" dataIndex="id" key="id" />
         <Column
@@ -114,6 +144,7 @@ function Device() {
           title="Status"
           dataIndex="status"
           key="status"
+          sorter={true}
           // {...getColumnSearchProps("teacherName")}
         />
         <Column

@@ -66,7 +66,6 @@ const deleteTimetable = (id, newTimetable) => (dispatch) => {
         payload: "Delete failed",
       });
     });
-  // console.log(newTimetable);
 };
 
 const changeTimetable = (id, data) => {
