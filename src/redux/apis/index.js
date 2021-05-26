@@ -7,7 +7,7 @@ import auth from "./login";
 import devices from "./device";
 
 let token = localStorage.getItem("token");
-const configHeader = {
+export const configHeader = {
   headers: { Authorization: "Bearer " + token },
 };
 // export default {

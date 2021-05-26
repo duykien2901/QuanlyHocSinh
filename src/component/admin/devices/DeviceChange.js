@@ -43,7 +43,7 @@ function DeviceChange({ screen, deviceId, resetDeviceField, onCloseModal }) {
     } else {
       const change = new Promise((resolve, reject) => {
         dispatch(changeDevice(values, deviceId, resolve, reject));
-      })
+      });
       await change;
       resetDeviceField();
       // onCloseModal();
@@ -56,6 +56,7 @@ function DeviceChange({ screen, deviceId, resetDeviceField, onCloseModal }) {
       let defaultDevice = listDevice.devices.find(
         (item) => item.id === deviceId
       );
+
       form.setFieldsValue({
         deviceName: defaultDevice.deviceName,
         status: defaultDevice.status,

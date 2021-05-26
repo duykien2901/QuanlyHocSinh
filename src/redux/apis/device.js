@@ -27,4 +27,8 @@ export default {
   changeDevice: (value, id) => {
     return axios.put(`/api/device/${id}`, value, configHeader);
   },
+
+  deleteDevice: (id) => {
+    return axios.delete(`/api/device/${id}`, configHeader);
+  },
 };

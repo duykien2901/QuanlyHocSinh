@@ -109,7 +109,7 @@ function Timetable() {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        dispatch(deleteTimetable(id, newTimetables));
+        dispatch(deleteTimetable(id, current, pageSize, searchDetals));
         swal("Your Timetable has been deleted", {
           icon: "success",
         });

@@ -15,6 +15,7 @@ import {
   faUserGraduate,
   faSchool,
   faHammer,
+  faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { SiderWrapper, HeaderWrapper, ContentWrapper } from "./MenuStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -98,6 +99,17 @@ function MenuAdmin(props) {
             icon={<FontAwesomeIcon icon={faHammer} />}
           >
             <Link to="/admin/device">Devices</Link>
+          </Menu.Item>
+          <Menu.Item
+            key="/admin/acount-people"
+            icon={
+              <FontAwesomeIcon
+                icon={faUserCircle}
+                style={{ fontSize: "20px" }}
+              />
+            }
+          >
+            <Link to="/admin/account-people">Account People</Link>
           </Menu.Item>
         </Menu>
       </SiderWrapper>

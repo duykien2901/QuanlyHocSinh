@@ -11,8 +11,7 @@ import {
 
 const getTimetable = (page, pageSize) => (dispatch) => {
   dispatch({ type: FETCH_TIMETABLES });
-  apis
-    .timetable
+  apis.timetable
     .getTimetable(page, pageSize)
     .then((res) => {
       dispatch({
@@ -31,8 +30,7 @@ const getTimetable = (page, pageSize) => (dispatch) => {
 };
 
 const addTimetable = (data) => {
-  apis
-    .timetable
+  apis.timetable
     .addTimetable(data)
     .then((res) => {
       notification.success({
@@ -48,17 +46,11 @@ const addTimetable = (data) => {
     });
 };
 
-const deleteTimetable = (id, newTimetable) => (dispatch) => {
-  apis
-    .timetable
+const deleteTimetable = (id, page, pageSize, value) => (dispatch) => {
+  apis.timetable
     .deleteTimetable(id)
     .then((res) => {
-      dispatch({
-        type: DELETE_TIMETABLES_SUCCESS,
-        payload: {
-          data: newTimetable,
-        },
-      });
+      dispatch(searchTimetableDetails(page, pageSize, value));
     })
     .catch((err) => {
       dispatch({
@@ -69,8 +61,7 @@ const deleteTimetable = (id, newTimetable) => (dispatch) => {
 };
 
 const changeTimetable = (id, data) => {
-  apis
-    .timetable
+  apis.timetable
     .changeTimetable(id, data)
     .then((res) => {
       notification.success({
@@ -88,8 +79,7 @@ const changeTimetable = (id, data) => {
 
 const searchTimetable = (page, pageSize, value) => (dispatch) => {
   dispatch({ type: FETCH_TIMETABLES });
-  apis
-    .timetable
+  apis.timetable
     .searchTimetable(page, pageSize, value)
     .then((res) => {
       dispatch({
@@ -109,8 +99,7 @@ const searchTimetable = (page, pageSize, value) => (dispatch) => {
 
 const searchTimetableDetails = (page, pageSize, value) => (dispatch) => {
   dispatch({ type: FETCH_TIMETABLES });
-  apis
-    .timetable
+  apis.timetable
     .searchTimetableDetails(page, pageSize, value)
     .then((res) => {
       dispatch({
@@ -127,4 +116,11 @@ const searchTimetableDetails = (page, pageSize, value) => (dispatch) => {
       });
     });
 };
-export { getTimetable, deleteTimetable, addTimetable, changeTimetable, searchTimetable, searchTimetableDetails };
+export {
+  getTimetable,
+  deleteTimetable,
+  addTimetable,
+  changeTimetable,
+  searchTimetable,
+  searchTimetableDetails,
+};

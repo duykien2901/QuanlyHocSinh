@@ -2,12 +2,15 @@ import { Button, Table, Space } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import Column from "antd/lib/table/Column";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import {
+  deleteDevice,
   getPageDevice,
   getPageDeviceSorting,
 } from "../../../redux/actions/device";
+import swal from "sweetalert";
 import { ADD_SCREEN, BORROW_SCREEN, EDIT_SCREEN } from "./constant";
 import DeviceChange from "./DeviceChange";
 import PersonBorrowDevice from "./PersonBorrowDevice";
@@ -30,21 +33,22 @@ function Device() {
   }));
 
   const { path } = useRouteMatch();
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(getPageDevice(currentPage, pageSize));
   }, [dispatch, currentPage, pageSize]);
 
-  const onPageChange = (page, pageSize) => {
-    setCurrentPage(page);
-    setPageSize(pageSize);
-  };
-
   const onTableChange = (pagination, filters, sorter) => {
+    console.log(pagination);
+    if (currentPage != pagination.current || pageSize != pagination.pageSize) {
+      setCurrentPage(pagination.current);
+      setPageSize(pagination.pageSize);
+    }
+
     let sort = sorter.order === "ascend" ? true : false;
-    sorter.order
-      ? dispatch(getPageDeviceSorting(currentPage, pageSize, sort))
-      : dispatch(getPageDevice(currentPage, pageSize));
+    sorter.order && dispatch(getPageDeviceSorting(currentPage, pageSize, sort));
+    // : dispatch(getPageDevice(currentPage, pageSize));
   };
 
   const onShowPersonBorrow = (id) => {
@@ -71,6 +75,35 @@ function Device() {
 
   const onCloseModalAfterUpdate = () => {
     setOnShowModalBorrow(false);
+  };
+
+  const onDelete = (id) => {
+    swal({
+      title: "Are you sure",
+      text: "Once deleted, you will not be able to recover this timetable!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        dispatch(deleteDevice(id, currentPage, pageSize));
+        swal("Your Timetable has been deleted", {
+          icon: "success",
+        });
+      } else {
+        swal("you dont't delete this timetable");
+      }
+    });
+  };
+
+  const onClick = () => {
+    axios
+      .get("/user/redirect?id=1", {
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      })
+      .then((res) => {
+        window.location.href = res.data;
+      });
   };
 
   return (
@@ -127,7 +160,6 @@ function Device() {
           pageSizeOptions: [5, 10, 15],
           total: devices.total,
           showSizeChanger: true,
-          onChange: onPageChange,
         }}
         onChange={onTableChange}
       >
@@ -149,8 +181,8 @@ function Device() {
         />
         <Column
           align="center"
-          title="Action"
-          key="action"
+          title="Borrow"
+          key="borrow"
           render={(text, record) => {
             return (
               <Space size="middle">
@@ -161,6 +193,17 @@ function Device() {
                 >
                   watch
                 </Button>
+              </Space>
+            );
+          }}
+        />
+        <Column
+          align="center"
+          title="Action"
+          key="action"
+          render={(text, record) => {
+            return (
+              <Space size="middle">
                 <Button
                   type="primary"
                   ghost
@@ -168,11 +211,15 @@ function Device() {
                 >
                   Edit
                 </Button>
+                <Button danger ghost onClick={() => onDelete(record.id)}>
+                  Delete
+                </Button>
               </Space>
             );
           }}
         />
       </Table>
+      <button onClick={onClick}>a</button>
     </div>
   );
 }

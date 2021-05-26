@@ -100,4 +100,16 @@ const changeDevice = (value, id, resolve, reject) => (dispatch) => {
       reject && reject();
     });
 };
-export { getPageDevice, addDevice, getPageDeviceSorting, changeDevice };
+
+const deleteDevice = (id, page, pageSize) => (dispatch) => {
+  apis.devices.deleteDevice(id).then((res) => {
+    dispatch(getPageDevice(page, pageSize));
+  });
+};
+export {
+  getPageDevice,
+  addDevice,
+  getPageDeviceSorting,
+  changeDevice,
+  deleteDevice,
+};
