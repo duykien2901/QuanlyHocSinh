@@ -1,21 +1,21 @@
 import {
-  FETCH_CLASS,
-  FETCH_CLASS_ERROR,
-  FETCH_CLASS_SUCCESS,
+  FETCH_ACCOUNTS,
+  FETCH_ACCOUNTS_ERROR,
+  FETCH_ACCOUNTS_SUCCESS,
 } from "../constants/action-types";
 
 var initialState = {
   list: {
     isLoading: false,
-    listClass: [],
     message: "",
+    accounts: [],
     total: 0,
   },
 };
 
-let classReducer = (state = initialState, action) => {
+var accountReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_CLASS:
+    case FETCH_ACCOUNTS:
       return {
         ...state,
         list: {
@@ -23,28 +23,28 @@ let classReducer = (state = initialState, action) => {
           isLoading: true,
         },
       };
-    case FETCH_CLASS_SUCCESS:
+    case FETCH_ACCOUNTS_SUCCESS:
       return {
         ...state,
         list: {
           ...state.list,
           isLoading: false,
-          listClass: action.payload.data,
-          message: "successfull",
+          accounts: action.payload.data,
+          message: "success",
         },
       };
-    case FETCH_CLASS_ERROR:
+    case FETCH_ACCOUNTS_ERROR:
       return {
         ...state,
         list: {
           ...state.list,
           isLoading: false,
-          message: "Failed",
+          message: "error",
+          accounts: [],
         },
       };
     default:
       return state;
   }
 };
-
-export default classReducer;
+export default accountReducer;

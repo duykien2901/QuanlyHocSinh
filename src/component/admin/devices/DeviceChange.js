@@ -45,8 +45,8 @@ function DeviceChange({ screen, deviceId, resetDeviceField, onCloseModal }) {
         dispatch(changeDevice(values, deviceId, resolve, reject));
       });
       await change;
-      resetDeviceField();
-      // onCloseModal();
+      // resetDeviceField();
+      onCloseModal();
     }
   };
 

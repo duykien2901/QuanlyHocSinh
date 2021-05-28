@@ -1,7 +1,22 @@
-import { LOGIN, LOGIN_FAILED, LOGIN_SUCCESS } from "../constants/action-types";
+import {
+  FETCH_ACCOUNTS,
+  FETCH_ACCOUNTS_ERROR,
+  FETCH_ACCOUNTS_SUCCESS,
+  LOGIN,
+  LOGIN_FAILED,
+  LOGIN_SUCCESS,
+} from "../constants/action-types";
 import apis from "../apis/index";
 import { notification } from "antd";
 import { DecodeJwt } from "../../commom/DecodeJwt";
+
+const redirectPage = (permission, history) => {
+  permission === "ROLE_ADMIN"
+    ? history.replace("/admin")
+    : permission === "ROLE_TEACHER"
+    ? history.push("/teacher")
+    : history.push("/student");
+};
 
 const loginAction = (data, history) => (dispatch) => {
   dispatch({ type: LOGIN });
@@ -24,22 +39,10 @@ const loginAction = (data, history) => (dispatch) => {
       localStorage.setItem("token", token);
       notification.success({
         message: "Login sucessfully",
-        duration: 0.5,
+        duration: 1.5,
       });
 
-      if (permission === "ROLE_ADMIN") {
-        setTimeout(() => {
-          history.replace("/admin");
-        }, 500);
-      } else if (permission === "ROLE_TEACHER") {
-        setTimeout(() => {
-          history.replace("/teacher");
-        }, 500);
-      } else {
-        setTimeout(() => {
-          history.replace("/student");
-        }, 500);
-      }
+      redirectPage(permission, history);
     })
     .catch((error) => {
       dispatch({
@@ -56,4 +59,35 @@ const loginAction = (data, history) => (dispatch) => {
     });
 };
 
-export { loginAction };
+const getAccountUser = (page, pageSize) => (dispatch) => {
+  dispatch({ type: FETCH_ACCOUNTS });
+  apis.accounts
+    .getAccountUser(page, pageSize)
+    .then((res) => {
+      dispatch({
+        type: FETCH_ACCOUNTS_SUCCESS,
+        payload: {
+          data: res.data.data,
+          total: res.data.total,
+        },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: FETCH_ACCOUNTS_ERROR,
+      });
+    });
+};
+
+const deleteAccountUer = (id, page, pageSize) => (dispatch) => {
+  apis.accounts
+    .deleteAccount(id)
+    .then((res) => {
+      dispatch(getAccountUser(page, pageSize));
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export { loginAction, getAccountUser, deleteAccountUer };

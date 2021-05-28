@@ -48,7 +48,6 @@ function Device() {
 
     let sort = sorter.order === "ascend" ? true : false;
     sorter.order && dispatch(getPageDeviceSorting(currentPage, pageSize, sort));
-    // : dispatch(getPageDevice(currentPage, pageSize));
   };
 
   const onShowPersonBorrow = (id) => {
@@ -70,7 +69,6 @@ function Device() {
 
   const resetDeviceField = () => {
     dispatch(getPageDevice(currentPage, pageSize));
-    onCloseModalAfterUpdate();
   };
 
   const onCloseModalAfterUpdate = () => {
@@ -130,11 +128,7 @@ function Device() {
         )}
 
         {onScreen === ADD_SCREEN && (
-          <DeviceChange
-            screen={onScreen}
-            resetDeviceField={resetDeviceField}
-            onCloseModal={onCloseModalAfterUpdate}
-          />
+          <DeviceChange screen={onScreen} resetDeviceField={resetDeviceField} />
         )}
 
         {onScreen === EDIT_SCREEN && (
@@ -142,6 +136,7 @@ function Device() {
             screen={onScreen}
             deviceId={modalBorrowId}
             resetDeviceField={resetDeviceField}
+            onCloseModal={onCloseModalAfterUpdate}
           />
         )}
       </Modal>

@@ -41,6 +41,50 @@ function Timetable() {
     dispatch(searchTimetableDetails(current, pageSize, searchDetals));
   }, [dispatch, current, pageSize, searchDetals]);
 
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    setSearchDetails((searchDetals) => ({
+      ...searchDetals,
+      [dataIndex]: selectedKeys[0] ? selectedKeys[0] : "",
+    }));
+    confirm();
+  };
+
+  const handleReset = (clearFilters, selectedKeys, dataIndex) => {
+    clearFilters();
+    setSearchDetails((searchDetals) => ({
+      ...searchDetals,
+      [dataIndex]: "",
+    }));
+  };
+
+  const onDelete = (id) => {
+    swal({
+      title: "Are you sure",
+      text: "Once deleted, you will not be able to recover this timetable!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        dispatch(deleteTimetable(id, current, pageSize, searchDetals));
+        swal("Your Timetable has been deleted", {
+          icon: "success",
+        });
+      } else {
+        swal("you dont't delete this timetable");
+      }
+    });
+  };
+
+  const onPageChange = (page, pageSize) => {
+    setCurrent(page);
+    setPageSize(pageSize);
+  };
+
+  const onSearch = (value) => {
+    setValueSearch(value);
+  };
+
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -82,51 +126,6 @@ function Timetable() {
       <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
   });
-
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    setSearchDetails((searchDetals) => ({
-      ...searchDetals,
-      [dataIndex]: selectedKeys[0] ? selectedKeys[0] : "",
-    }));
-    confirm();
-  };
-
-  const handleReset = (clearFilters, selectedKeys, dataIndex) => {
-    clearFilters();
-    setSearchDetails((searchDetals) => ({
-      ...searchDetals,
-      [dataIndex]: "",
-    }));
-  };
-
-  const onDelete = (id) => {
-    let newTimetables = dataSource.timetables.filter((item) => item.id !== id);
-    swal({
-      title: "Are you sure",
-      text: "Once deleted, you will not be able to recover this timetable!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        dispatch(deleteTimetable(id, current, pageSize, searchDetals));
-        swal("Your Timetable has been deleted", {
-          icon: "success",
-        });
-      } else {
-        swal("you dont't delete this timetable");
-      }
-    });
-  };
-
-  const onPageChange = (page, pageSize) => {
-    setCurrent(page);
-    setPageSize(pageSize);
-  };
-
-  const onSearch = (value) => {
-    setValueSearch(value);
-  };
   return (
     <div
       className="site-layout-background"
