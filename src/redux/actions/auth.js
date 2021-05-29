@@ -90,4 +90,20 @@ const deleteAccountUer = (id, page, pageSize) => (dispatch) => {
     });
 };
 
-export { loginAction, getAccountUser, deleteAccountUer };
+const addAccountUser = (value, resolve, reject) => (dispatch) => {
+  apis.accounts
+    .addAccount(value)
+    .then((res) => {
+      notification.success({
+        message: "Successful",
+        duration: 1,
+      });
+      resolve && resolve();
+    })
+    .then((err) => {
+      console.log(err);
+      reject && reject();
+    });
+};
+
+export { loginAction, getAccountUser, deleteAccountUer, addAccountUser };

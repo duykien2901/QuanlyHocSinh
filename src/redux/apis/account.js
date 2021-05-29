@@ -15,4 +15,8 @@ export default {
   deleteAccount: (id) => {
     return axios.delete(`/api/admin/account/${id}`, configHeader);
   },
+
+  addAccount: (value) => {
+    return axios.post(`/api/admin/signup`, value, configHeader);
+  },
 };

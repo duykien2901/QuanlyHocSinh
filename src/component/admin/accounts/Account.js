@@ -5,11 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteAccountUer, getAccountUser } from "../../../redux/actions/auth";
 import swal from "sweetalert";
 import AccountChange from "./AccountChange";
+import { ADD_SCREEN, EDIT_SCREEN } from "../devices/constant";
 
 function Account() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [onShowModalAccount, setOnShowModalAccount] = useState(false);
+  const [onScreen, setOnScreen] = useState();
+  const [accountId, setAccountId] = useState();
   const accountList = useSelector((state) => state.accounts.list);
   const dispatch = useDispatch();
 
@@ -38,9 +41,24 @@ function Account() {
           icon: "success",
         });
       } else {
-        swal("you dont't delete this timetable");
+        swal("you dont't delete this account");
       }
     });
+  };
+
+  const onShowAddAccount = () => {
+    setOnScreen(ADD_SCREEN);
+    setOnShowModalAccount(true);
+  };
+
+  const onEditAccount = (accountId) => {
+    setOnScreen(EDIT_SCREEN);
+    setOnShowModalAccount(true);
+    setAccountId(accountId);
+  };
+
+  const onResetAccountTable = () => {
+    dispatch(getAccountUser(currentPage, pageSize));
   };
 
   const renderModalAccount = () => (
@@ -54,7 +72,15 @@ function Account() {
       okButtonProps={{ hidden: true }}
       cancelButtonProps={{ hidden: true }}
     >
-      <AccountChange />
+      {onScreen === ADD_SCREEN && (
+        <AccountChange
+          screen={onScreen}
+          onResetAccountTable={onResetAccountTable}
+        />
+      )}
+      {onScreen === EDIT_SCREEN && (
+        <AccountChange screen={onScreen} accountId={accountId} />
+      )}
     </Modal>
   );
   return (
@@ -67,7 +93,7 @@ function Account() {
       }}
     >
       {renderModalAccount()}
-      <Button type="primary" onClick={() => setOnShowModalAccount(true)}>
+      <Button type="primary" onClick={onShowAddAccount}>
         Add
       </Button>
       <Table
@@ -125,7 +151,7 @@ function Account() {
                 <Button
                   type="primary"
                   ghost
-                  onClick={() => setOnShowModalAccount(true)}
+                  onClick={() => onEditAccount(record.id)}
                 >
                   Edit
                 </Button>
