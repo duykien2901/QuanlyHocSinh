@@ -67,7 +67,7 @@ function MenuAdmin(props) {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh", background: "#f65f6f8" }}>
       <SiderWrapper theme="light">
         <div className="logo">
           <Row justify="center" align="middle">
