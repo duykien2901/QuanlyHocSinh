@@ -12,6 +12,9 @@ const TimetableChange = lazy(() =>
 );
 const Device = lazy(() => import("../../component/admin/devices/Device"));
 const Account = lazy(() => import("../../component/admin/accounts/Account"));
+const AccountInfor = lazy(() =>
+  import("../../component/admin/accounts/AccountInfor")
+);
 
 function AdminRoute() {
   const { path } = useRouteMatch();
@@ -34,6 +37,11 @@ function AdminRoute() {
           />
           <Route component={Device} exact path={`${path}/device`} />
           <Route component={Account} exact path={`${path}/account-people`} />
+          <Route
+            component={AccountInfor}
+            exact
+            path={`${path}/account-infor/:id`}
+          />
         </Switch>
       </Suspense>
     </MenuAdmin>

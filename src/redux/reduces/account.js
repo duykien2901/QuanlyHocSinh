@@ -30,6 +30,7 @@ var accountReducer = (state = initialState, action) => {
           ...state.list,
           isLoading: false,
           accounts: action.payload.data,
+          total: action.payload.total,
           message: "success",
         },
       };

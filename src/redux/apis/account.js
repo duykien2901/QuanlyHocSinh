@@ -19,4 +19,12 @@ export default {
   addAccount: (value) => {
     return axios.post(`/api/admin/signup`, value, configHeader);
   },
+
+  changeAccount: (value, accountId) => {
+    return axios.put(`/api/admin/account/${accountId}`, value, configHeader);
+  },
+
+  getAccountInfor: (accountId) => {
+    return axios.get(`/api/personalInfo/${accountId}`, configHeader);
+  },
 };

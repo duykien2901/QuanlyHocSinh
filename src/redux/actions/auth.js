@@ -102,8 +102,37 @@ const addAccountUser = (value, resolve, reject) => (dispatch) => {
     })
     .then((err) => {
       console.log(err);
+      notification.error({
+        message: "Add Account Failed",
+        duration: 1,
+      });
       reject && reject();
     });
 };
 
-export { loginAction, getAccountUser, deleteAccountUer, addAccountUser };
+const changeAccountUser = (value, accountId, resolve, reject) => (dispatch) => {
+  apis.accounts
+    .changeAccount(value, accountId)
+    .then((res) => {
+      notification.success({
+        message: "Change Account Success",
+        duration: 1,
+      });
+      resolve && resolve();
+    })
+    .catch((err) => {
+      notification.error({
+        message: "Username is exist",
+        duration: 1,
+      });
+      reject && reject();
+    });
+};
+
+export {
+  loginAction,
+  getAccountUser,
+  deleteAccountUer,
+  addAccountUser,
+  changeAccountUser,
+};

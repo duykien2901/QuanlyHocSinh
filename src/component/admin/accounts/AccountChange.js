@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Input, Form, Button, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_SCREEN, EDIT_SCREEN } from "../devices/constant";
-import { addAccountUser } from "../../../redux/actions/auth";
+import { addAccountUser, changeAccountUser } from "../../../redux/actions/auth";
 
 const layout = {
   labelCol: {
@@ -25,7 +25,12 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-function AccountChange({ accountId, screen, onResetAccountTable }) {
+function AccountChange({
+  accountId,
+  screen,
+  onResetAccountTable,
+  onCloseModalAccount,
+}) {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const accountList = useSelector((state) => state.accounts.list.accounts);
@@ -35,11 +40,11 @@ function AccountChange({ accountId, screen, onResetAccountTable }) {
       let defaultAccount = accountList.find(
         (account) => account.id === accountId
       );
-      let { id, username, permission } = defaultAccount;
+      let { id, username, password, permission } = defaultAccount;
       form.setFieldsValue({
         id,
         username,
-        password: "",
+        password,
         permission,
       });
     }
@@ -57,6 +62,17 @@ function AccountChange({ accountId, screen, onResetAccountTable }) {
       });
       await addAccount;
       onResetAccountTable();
+    } else {
+      const changeAccount = new Promise((resolve, reject) => {
+        let accountId = values.id;
+        delete values.id;
+        dispatch(changeAccountUser(values, accountId, resolve, reject));
+      });
+      await changeAccount;
+      changeAccount.then(() => {
+        onResetAccountTable();
+        onCloseModalAccount();
+      });
     }
   };
 

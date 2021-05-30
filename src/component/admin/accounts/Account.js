@@ -6,6 +6,7 @@ import { deleteAccountUer, getAccountUser } from "../../../redux/actions/auth";
 import swal from "sweetalert";
 import AccountChange from "./AccountChange";
 import { ADD_SCREEN, EDIT_SCREEN } from "../devices/constant";
+import { Link } from "react-router-dom";
 
 function Account() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,6 +26,17 @@ function Account() {
       item.key = item.id;
       return item;
     });
+  };
+
+  const onTableChange = (pagination, filters, sorter) => {
+    console.log(pagination);
+    if (currentPage != pagination.current || pageSize != pagination.pageSize) {
+      setCurrentPage(pagination.current);
+      setPageSize(pagination.pageSize);
+    }
+
+    // let sort = sorter.order === "ascend" ? true : false;
+    // sorter.order && dispatch(getPageDeviceSorting(currentPage, pageSize, sort));
   };
 
   const onDeleteAccount = (id) => {
@@ -61,6 +73,10 @@ function Account() {
     dispatch(getAccountUser(currentPage, pageSize));
   };
 
+  const onCloseModalAccount = () => {
+    setOnShowModalAccount(true);
+  };
+
   const renderModalAccount = () => (
     <Modal
       visible={onShowModalAccount}
@@ -79,7 +95,12 @@ function Account() {
         />
       )}
       {onScreen === EDIT_SCREEN && (
-        <AccountChange screen={onScreen} accountId={accountId} />
+        <AccountChange
+          screen={onScreen}
+          accountId={accountId}
+          onResetAccountTable={onResetAccountTable}
+          onCloseModalAccount={onCloseModalAccount}
+        />
       )}
     </Modal>
   );
@@ -106,6 +127,7 @@ function Account() {
           total: accountList.total,
           showSizeChanger: true,
         }}
+        onChange={onTableChange}
       >
         <Column align="center" dataIndex="id" title="id" key="id" />
         <Column
@@ -134,9 +156,11 @@ function Account() {
           render={(text, record) => {
             return (
               <Space>
-                <Button ghost type="primary">
-                  Watch
-                </Button>
+                <Link to={`/admin/account-infor/${record.id}`}>
+                  <Button ghost type="primary">
+                    Watch
+                  </Button>
+                </Link>
               </Space>
             );
           }}
