@@ -30,6 +30,10 @@ export const AccountInforWrapper = styled.div`
         0 10px 10px rgb(90 97 105 / 6%), 0 7px 70px rgb(90 97 105 / 10%);
       background-color: #fff;
 
+      .button-add {
+        box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%),
+          0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+      }
       .button-back {
         margin: 15px;
         padding: 5px;

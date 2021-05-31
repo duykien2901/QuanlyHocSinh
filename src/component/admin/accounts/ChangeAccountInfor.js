@@ -1,9 +1,11 @@
-import { Col, Input, Row, Form, Button, DatePicker } from "antd";
+import { Col, Input, Row, Form, Button, DatePicker, notification } from "antd";
 import { useForm } from "antd/lib/form/Form";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { formatDate } from "../../../commom/FormatDate";
 import moment from "moment";
+import apis from "../../../redux/apis";
 import { FormAccountWrapper } from "./style";
+import { useParams } from "react-router";
 const layout = {
   labelCol: {
     span: 0,
@@ -24,39 +26,100 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-const dateFormat = "YYYY/MM/DD";
-function ChangeAccountInfor({ personalInfor }) {
+const configHeader = {
+  headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+};
+
+const dateFormat = "YYYY-MM-DD";
+function ChangeAccountInfor({ personalInfor, updatePersonalInfor }) {
   const [form] = useForm();
+  const [date, setDate] = useState();
+  const { id } = useParams();
 
   useEffect(() => {
-    const {
-      address,
-      // dateOfBirth,
-      email,
-      ethnicity,
-      firstName,
-      gender,
-      lastName,
-      phoneNumber,
-      religion,
-      id,
-    } = personalInfor;
-    form.setFieldsValue({
-      address,
-      dateOfBirth: moment(formatDate(personalInfor.dateOfBirth), dateFormat),
-      email,
-      ethnicity,
-      firstName,
-      gender,
-      id,
-      lastName,
-      phoneNumber,
-      religion,
-    });
+    if (personalInfor) {
+      const {
+        address,
+        // dateOfBirth,
+        email,
+        ethnicity,
+        firstName,
+        gender,
+        lastName,
+        phoneNumber,
+        religion,
+        id,
+      } = personalInfor;
+      form.setFieldsValue({
+        address,
+        dateOfBirth: moment(formatDate(personalInfor.dateOfBirth), dateFormat),
+        email,
+        ethnicity,
+        firstName,
+        gender,
+        id,
+        lastName,
+        phoneNumber,
+        religion,
+      });
+    } else {
+      form.setFieldsValue({
+        address: "",
+        dateOfBirth: "",
+        email: "",
+        ethnicity: "",
+        firstName: "",
+        gender: "",
+        id: "",
+        lastName: "",
+        phoneNumber: "",
+        religion: "",
+      });
+    }
   }, []);
 
   const onFinish = (values) => {
-    console.log(values.dateOfBirth._i);
+    values.dateOfBirth = date;
+    values.accountId = id;
+    // values.id = 10;
+    console.log(values);
+    if (personalInfor) {
+      apis.accounts
+        .editAccountInfor(values)
+        .then((res) => {
+          updatePersonalInfor(values);
+          notification.success({
+            message: "Change Account Infor successfully",
+            duration: 1,
+          });
+        })
+        .catch((err) => {
+          notification.error({
+            message: "Change Account Infor Error",
+            duration: 1,
+          });
+        });
+    } else {
+      apis.accounts
+        .addAccountInfor(values)
+        .then((res) => {
+          updatePersonalInfor(values);
+          notification.success({
+            message: "Add Account Infor successfully",
+            duration: 1,
+          });
+        })
+        .catch((err) => {
+          notification.error({
+            message: "Add Account Infor Error",
+            duration: 1,
+          });
+        });
+    }
+  };
+
+  const onChange = (date, dateString) => {
+    setDate(dateString);
   };
   return (
     <FormAccountWrapper
@@ -68,17 +131,19 @@ function ChangeAccountInfor({ personalInfor }) {
     >
       <Row justify="space-around">
         <Col span={9}>
-          <Form.Item
-            name="id"
-            label="Id"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input disabled />
-          </Form.Item>
+          {personalInfor && (
+            <Form.Item
+              name="id"
+              label="Id"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input disabled />
+            </Form.Item>
+          )}
           <Form.Item
             name="firstName"
             label="First Name"
@@ -121,7 +186,7 @@ function ChangeAccountInfor({ personalInfor }) {
               },
             ]}
           >
-            <DatePicker format={dateFormat} />
+            <DatePicker onChange={onChange} format={dateFormat} />
           </Form.Item>
         </Col>
 
@@ -179,13 +244,13 @@ function ChangeAccountInfor({ personalInfor }) {
               },
             ]}
           >
-            <Input allowClear />
+            <Input type="email" allowClear />
           </Form.Item>
         </Col>
       </Row>
       <Form.Item className="button-submit">
         <Button htmlType="submit" type="primary">
-          Update
+          {personalInfor ? "Update" : "Add"}
         </Button>
       </Form.Item>
     </FormAccountWrapper>

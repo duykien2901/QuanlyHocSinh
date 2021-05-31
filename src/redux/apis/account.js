@@ -27,4 +27,12 @@ export default {
   getAccountInfor: (accountId) => {
     return axios.get(`/api/personalInfo/${accountId}`, configHeader);
   },
+
+  editAccountInfor: (values) => {
+    return axios.put("/api/personalInfo", values, configHeader);
+  },
+
+  addAccountInfor: (values) => {
+    return axios.post("/api/personalInfo", values, configHeader);
+  },
 };
