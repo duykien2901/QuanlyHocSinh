@@ -156,7 +156,7 @@ function Account() {
           render={(text, record) => {
             return (
               <Space>
-                <Link to={`/admin/account-infor/${record.id}`}>
+                <Link to={`/admin/account-people/${record.id}`}>
                   <Button ghost type="primary">
                     Watch
                   </Button>

@@ -1,17 +1,27 @@
 import { Typography, Row, Col, Button } from "antd";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouteMatch } from "react-router";
+import { useHistory, useParams } from "react-router";
 import apis from "../../../redux/apis";
 import { AccountInforWrapper } from "./style";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserCircle,
+  faArrowLeft,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChangeAccountInfor from "./ChangeAccountInfor";
+import Modal from "antd/lib/modal/Modal";
+import { formatDate } from "../../../commom/FormatDate";
 
 const { Text, Paragraph, Title } = Typography;
 
 function AccountInfor() {
   const [personalInfor, setPersonalInfor] = useState({});
+  const [onShowAccountChangeModal, setOnShowAccountChangeModal] = useState(
+    false
+  );
   const { id } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     apis.accounts.getAccountInfor(id).then((res) => {
@@ -19,13 +29,27 @@ function AccountInfor() {
     });
   }, []);
 
-  const formatDate = (date) => {
-    let newDate = new Date(date);
-    newDate = `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()}`;
-    return newDate;
+  const onBackAccountList = () => {
+    history.push("/admin/account-people");
   };
+
+  const renderAccountChangeModal = () => (
+    <Modal
+      visible={onShowAccountChangeModal}
+      title="Change account"
+      centered
+      onOk={() => setOnShowAccountChangeModal(false)}
+      onCancel={() => setOnShowAccountChangeModal(false)}
+      width={900}
+      okButtonProps={{ hidden: true }}
+      cancelButtonProps={{ hidden: true }}
+    >
+      <ChangeAccountInfor personalInfor={personalInfor} />
+    </Modal>
+  );
   return (
     <AccountInforWrapper>
+      {renderAccountChangeModal()}
       <Paragraph className="title-infor">
         <FontAwesomeIcon
           icon={faUserCircle}
@@ -34,13 +58,24 @@ function AccountInfor() {
         Information of User
       </Paragraph>
 
-      <Row className="user-wrapper" gutter={[45, 45]}>
+      <Row className="user-wrapper" gutter={[64, 64]}>
         <Col span={24}>
           <div className="user-details-wrapper">
-            {/* <Paragraph className="user-title">User Details</Paragraph> */}
             <Row justify="space-between">
-              <Button>back</Button>
-              <Button>Update</Button>
+              <span className="button-back" onClick={onBackAccountList}>
+                <FontAwesomeIcon icon={faArrowLeft} style={{ fontSize: 30 }} />
+              </span>
+              <Button
+                type="primary"
+                className="button-edit"
+                onClick={() => setOnShowAccountChangeModal(true)}
+              >
+                Update
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  style={{ fontSize: 18, marginLeft: 5 }}
+                />
+              </Button>
             </Row>
             <Row>
               <Col span={12}>
@@ -111,11 +146,6 @@ function AccountInfor() {
             </Row>
           </div>
         </Col>
-        {/* <Col span={10}>
-          <div className="user-details-wrapper">
-            <ChangeAccountInfor />
-          </div>
-        </Col> */}
       </Row>
     </AccountInforWrapper>
   );

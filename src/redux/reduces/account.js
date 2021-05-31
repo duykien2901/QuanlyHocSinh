@@ -2,6 +2,7 @@ import {
   FETCH_ACCOUNTS,
   FETCH_ACCOUNTS_ERROR,
   FETCH_ACCOUNTS_SUCCESS,
+  FETCH_ACCOUNT_INFOR,
 } from "../constants/action-types";
 
 var initialState = {
@@ -10,6 +11,11 @@ var initialState = {
     message: "",
     accounts: [],
     total: 0,
+  },
+  accountInfor: {
+    isLoading: false,
+    message: "",
+    infor: {},
   },
 };
 
@@ -44,6 +50,14 @@ var accountReducer = (state = initialState, action) => {
           accounts: [],
         },
       };
+    // case FETCH_ACCOUNT_INFOR:
+    //   return {
+    //     ...state,
+    //     accountInfor: {
+    //       ...state.accountInfor,
+    //       isLoading: true,
+    //     },
+    //   };
     default:
       return state;
   }

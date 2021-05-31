@@ -62,6 +62,8 @@ function MenuAdmin(props) {
       ? "/admin/timetable"
       : path.includes("/admin/device")
       ? "/admin/device"
+      : path.includes("/admin/account-people")
+      ? "/admin/account-people"
       : "/admin";
     return defaultKey;
   };
@@ -101,7 +103,7 @@ function MenuAdmin(props) {
             <Link to="/admin/device">Devices</Link>
           </Menu.Item>
           <Menu.Item
-            key="/admin/acount-people"
+            key="/admin/account-people"
             icon={
               <FontAwesomeIcon
                 icon={faUserCircle}

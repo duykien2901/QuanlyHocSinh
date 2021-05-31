@@ -40,7 +40,7 @@ function AdminRoute() {
           <Route
             component={AccountInfor}
             exact
-            path={`${path}/account-infor/:id`}
+            path={`${path}/account-people/:id`}
           />
         </Switch>
       </Suspense>
