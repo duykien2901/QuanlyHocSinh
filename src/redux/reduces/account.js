@@ -3,6 +3,8 @@ import {
   FETCH_ACCOUNTS_ERROR,
   FETCH_ACCOUNTS_SUCCESS,
   FETCH_ACCOUNT_INFOR,
+  FETCH_ACCOUNT_INFOR_ERROR,
+  FETCH_ACCOUNT_INFOR_SUCCESS,
 } from "../constants/action-types";
 
 var initialState = {
@@ -50,14 +52,33 @@ var accountReducer = (state = initialState, action) => {
           accounts: [],
         },
       };
-    // case FETCH_ACCOUNT_INFOR:
-    //   return {
-    //     ...state,
-    //     accountInfor: {
-    //       ...state.accountInfor,
-    //       isLoading: true,
-    //     },
-    //   };
+    case FETCH_ACCOUNT_INFOR:
+      return {
+        ...state,
+        accountInfor: {
+          ...state.accountInfor,
+          isLoading: true,
+        },
+      };
+    case FETCH_ACCOUNT_INFOR_SUCCESS:
+      return {
+        ...state,
+        accountInfor: {
+          ...state.accountInfor,
+          isLoading: false,
+          infor: action.payload,
+          message: "Success",
+        },
+      };
+    case FETCH_ACCOUNT_INFOR_ERROR:
+      return {
+        ...state,
+        accountInfor: {
+          ...state.accountInfor,
+          isLoading: false,
+          message: "Error",
+        },
+      };
     default:
       return state;
   }

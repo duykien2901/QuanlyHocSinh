@@ -31,7 +31,7 @@ export default {
     );
   },
 
-	addTimetable: (data) => {
+  addTimetable: (data) => {
     return axios.post("/api/timetable/new", data, configHeader);
   },
 
@@ -42,4 +42,7 @@ export default {
   deleteTimetable: (id) => {
     return axios.delete(`/api/timetable/delete/${id}`, configHeader);
   },
-}
+  getTimetableFromStudentId: (studentId) => {
+    return axios.get(`/api/timetable/student/${studentId}`, configHeader);
+  },
+};

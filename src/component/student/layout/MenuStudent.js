@@ -22,23 +22,44 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Route, Switch, useHistory, useRouteMatch } from "react-router";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { filterTimetable } from "../../../redux/actions";
 import { checkPermission } from "../../../commom/CheckPermission";
 import PageNotFound from "../../../commom/PageNotFound";
+import { getAccountUser } from "../../../redux/actions/auth";
+import apis from "../../../redux/apis";
+import {
+  FETCH_ACCOUNT_INFOR_ERROR,
+  FETCH_ACCOUNT_INFOR_SUCCESS,
+} from "../../../redux/constants/action-types";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 function MenuStudent({ children }) {
   const dispatch = useDispatch();
   const [key, setKey] = useState(["/timetable"]);
+  const accountId = useSelector((state) => state.auth.id);
+  const accountInfor = useSelector(
+    (state) => state.accounts.accountInfor.infor
+  );
   const history = useHistory();
   const path = window.location.pathname;
   const permission = checkPermission();
 
-  //   useEffect(() => {
-  //     dispatch(filterTimetable());
-  //   }, []);
+  useEffect(() => {
+    apis.accounts
+      .getAccountInfor(accountId)
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: FETCH_ACCOUNT_INFOR_SUCCESS,
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        dispatch({ type: FETCH_ACCOUNT_INFOR_ERROR });
+      });
+  }, []);
 
   const onLogout = () => {
     localStorage.removeItem("token");
@@ -74,7 +95,7 @@ function MenuStudent({ children }) {
       <SiderWrapper theme="light">
         <div className="logo">
           <Row justify="center" align="middle">
-            <Avatar size={40}>A</Avatar>
+            <Avatar size={40}>{accountInfor.lastName?.charAt(0)}</Avatar>
             <span
               style={{
                 fontSize: "22px",
@@ -82,28 +103,31 @@ function MenuStudent({ children }) {
                 paddingLeft: "10px",
               }}
             >
-              School Student
+              {accountInfor.firstName + " " + accountInfor.lastName}
             </span>
           </Row>
         </div>
         <Menu
-          defaultSelectedKeys={onRenderDefaultKeyMenu()}
-          mode="inline"
+          // defaultSelectedKeys={onRenderDefaultKeyMenu()}
+          // mode="inline"
           key={key}
         >
-          <Menu.Item key="/admin" icon={<HomeOutlined />}>
-            <Link to="/admin">Home</Link>
-          </Menu.Item>
-          <Menu.Item key={"/admin/timetable"} icon={<ScheduleOutlined />}>
-            <Link to="/admin/timetable">Timetable</Link>
+          <Menu.Item key="/student" icon={<HomeOutlined />}>
+            <Link to="/student">Home</Link>
           </Menu.Item>
           <Menu.Item
+            key={`/student/timetable/${accountId}`}
+            icon={<ScheduleOutlined />}
+          >
+            <Link to={`/student/timetable/${accountId}`}>Timetable</Link>
+          </Menu.Item>
+          {/* <Menu.Item
             key="/admin/device"
             icon={<FontAwesomeIcon icon={faHammer} />}
           >
             <Link to="/admin/device">Devices</Link>
-          </Menu.Item>
-          <Menu.Item
+          </Menu.Item> */}
+          {/* <Menu.Item
             key="/admin/account-people"
             icon={
               <FontAwesomeIcon
@@ -113,7 +137,7 @@ function MenuStudent({ children }) {
             }
           >
             <Link to="/admin/account-people">Account People</Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
       </SiderWrapper>
       <Layout className="site-layout">
@@ -121,13 +145,14 @@ function MenuStudent({ children }) {
           <Row justify="space-between" align="middle">
             {onRenderBreadCumb()}
             <div>
-              <Avatar size={30}>A</Avatar>
+              <Avatar size={30}>{accountInfor.lastName?.charAt(0)}</Avatar>
               <span
                 style={{
                   fontSize: "17px",
                   fontWeight: "700",
                   paddingLeft: "10px",
                   color: "rgb(255 255 255 / 86%)",
+                  cursor: "pointer",
                 }}
                 onClick={onLogout}
               >
