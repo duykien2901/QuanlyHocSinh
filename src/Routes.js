@@ -1,24 +1,29 @@
-import React, { Suspense } from 'react'
-import { Redirect, Route, Switch } from 'react-router'
+import React, { Suspense } from "react";
+import { Redirect, Route, Switch, useHistory } from "react-router";
 
 import Loading from "./commom/Loading";
-import PrivateAdminRouter from './commom/PrivateAdminRouter';
-import LoginPage from './component/login/LoginPage';
-import AdminRoute from './Routes/admin/AdminRoute';
+import PageNotFound from "./commom/PageNotFound";
+import PrivateRouter from "./commom/PrivateRouter";
+import LoginPage from "./component/login/LoginPage";
+import AdminRoute from "./Routes/admin/AdminRoute";
+import StudentRoute from "./Routes/student/StudentRoute";
 
 function Routes() {
-    return (
-        <Suspense fallback={<Loading/>}>
-            <Switch>
-                <Route exact path="/">
-                    <Redirect to="/login"/>
-                </Route>
-                <Route component={LoginPage} exact path="/login"/>
+  const history = useHistory();
+  return (
+    <Suspense fallback={<Loading />}>
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
+        <Route component={LoginPage} exact path="/login" />
 
-                <PrivateAdminRouter component={AdminRoute} path="/admin"/>
-            </Switch>
-        </Suspense>
-    )
+        <PrivateRouter component={AdminRoute} path="/admin" />
+        <PrivateRouter component={StudentRoute} path="/student" />
+        <Route component={PageNotFound} path="*" />
+      </Switch>
+    </Suspense>
+  );
 }
 
 export default Routes;

@@ -17,30 +17,28 @@ import {
   faHammer,
   faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { SiderWrapper, HeaderWrapper, ContentWrapper } from "./MenuStyle";
+import { SiderWrapper, HeaderWrapper, ContentWrapper } from "./style";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useHistory } from "react-router";
+import { Route, Switch, useHistory, useRouteMatch } from "react-router";
 import { Link } from "react-router-dom";
-import jwts from "jsonwebtoken";
 import { useDispatch } from "react-redux";
 import { filterTimetable } from "../../../redux/actions";
 import { checkPermission } from "../../../commom/CheckPermission";
 import PageNotFound from "../../../commom/PageNotFound";
-const { Footer } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-function MenuAdmin(props) {
-  const path = window.location.pathname;
+function MenuStudent({ children }) {
   const dispatch = useDispatch();
-  const history = useHistory();
   const [key, setKey] = useState(["/timetable"]);
-  const { children } = props;
-  const permisson = checkPermission();
+  const history = useHistory();
+  const path = window.location.pathname;
+  const permission = checkPermission();
 
-  useEffect(() => {
-    dispatch(filterTimetable());
-  }, []);
+  //   useEffect(() => {
+  //     dispatch(filterTimetable());
+  //   }, []);
 
   const onLogout = () => {
     localStorage.removeItem("token");
@@ -71,7 +69,7 @@ function MenuAdmin(props) {
     return defaultKey;
   };
 
-  return permisson === "ROLE_ADMIN" ? (
+  return permission === "ROLE_STUDENT" ? (
     <Layout style={{ minHeight: "100vh", background: "#f65f6f8" }}>
       <SiderWrapper theme="light">
         <div className="logo">
@@ -84,7 +82,7 @@ function MenuAdmin(props) {
                 paddingLeft: "10px",
               }}
             >
-              School Admin
+              School Student
             </span>
           </Row>
         </div>
@@ -147,4 +145,4 @@ function MenuAdmin(props) {
   );
 }
 
-export default MenuAdmin;
+export default MenuStudent;
