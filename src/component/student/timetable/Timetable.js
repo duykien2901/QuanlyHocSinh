@@ -3,8 +3,9 @@ import { Button, Table, Space } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import "antd/dist/antd.css";
 import Column from "antd/lib/table/Column";
-import apis from "../../../redux/apis";
 import { useParams } from "react-router";
+import apis from "../../../redux/apis";
+
 function Timetable() {
   const [timetable, setTimetable] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +48,7 @@ function Timetable() {
         dataSource={dataSource()}
         loading={isLoading}
         bordered
+        pagination={false}
         // onChange={onTableChange}
       >
         <Column
@@ -62,63 +64,19 @@ function Timetable() {
           dataIndex="className"
           key="className"
           editable={true}
-          // {...getColumnSearchProps("className")}
         />
         <Column
           align="center"
           title="Teacher"
           dataIndex="teacherName"
           key="teacherName"
-          // sorter={true}
-          // {...getColumnSearchProps("teacherName")}
         />
         <Column
           align="center"
           title="Subject"
           dataIndex="courseName"
           key="courseName"
-          // sorter={true}
-          // {...getColumnSearchProps("teacherName")}
         />
-        {/* <Column
-        align="center"
-        title="Borrow"
-        key="borrow"
-        render={(text, record) => {
-          return (
-            <Space size="middle">
-              <Button
-                type="primary"
-                onClick={() => onShowPersonBorrow(record.id)}
-                ghost
-              >
-                watch
-              </Button>
-            </Space>
-          );
-        }}
-      /> */}
-        {/* <Column
-        align="center"
-        title="Action"
-        key="action"
-        render={(text, record) => {
-          return (
-            <Space size="middle">
-              <Button
-                type="primary"
-                ghost
-                onClick={() => onEditDevice(record.id)}
-              >
-                Edit
-              </Button>
-              <Button danger ghost onClick={() => onDelete(record.id)}>
-                Delete
-              </Button>
-            </Space>
-          );
-        }}
-      /> */}
       </Table>
     </div>
   );

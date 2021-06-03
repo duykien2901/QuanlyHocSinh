@@ -7,6 +7,7 @@ import PrivateRouter from "./commom/PrivateRouter";
 import LoginPage from "./component/login/LoginPage";
 import AdminRoute from "./Routes/admin/AdminRoute";
 import StudentRoute from "./Routes/student/StudentRoute";
+import TeacherRoute from "./Routes/teacher/TeacherRoute";
 
 function Routes() {
   const history = useHistory();
@@ -20,6 +21,7 @@ function Routes() {
 
         <PrivateRouter component={AdminRoute} path="/admin" />
         <PrivateRouter component={StudentRoute} path="/student" />
+        <PrivateRouter component={TeacherRoute} path="/teacher" />
         <Route component={PageNotFound} path="*" />
       </Switch>
     </Suspense>
