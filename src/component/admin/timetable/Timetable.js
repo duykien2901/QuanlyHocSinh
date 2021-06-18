@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Table, Tag, Space, Button, Popconfirm, Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Table, Tag, Space, Button, Popconfirm, Input, Row } from "antd";
+import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import apis from "../../../redux/apis";
 import {
   getTimetable,
@@ -10,6 +10,7 @@ import {
   searchTimetable,
   searchTimetableDetails,
 } from "../../../redux/actions/timtable";
+import { TableWrapper } from "./style";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import swal from "sweetalert";
 import Search from "antd/lib/transfer/search";
@@ -127,18 +128,32 @@ function Timetable() {
     ),
   });
   return (
-    <div
-      className="site-layout-background"
+    <TableWrapper
       style={{
-        margin: "24px",
+        margin: "50px 24px 24px",
         minHeight: 360,
         height: "100%",
         backgroundColor: "#fff",
       }}
     >
-      <Link to={`${path}/add`}>
-        <Button type="primary">Add</Button>
-      </Link>
+      <div className="title">
+        <div className="title-timtable">Table Timetable</div>
+        <div className="comment">Here is a subtitle for this table</div>
+      </div>
+      <Row
+        justify="end"
+        style={{
+          padding: "80px 24px 0px 24px",
+        }}
+      >
+        <Link to={`${path}/add`}>
+          <Button type="primary" className="add-btn">
+            <PlusOutlined />
+            Add
+          </Button>
+        </Link>
+      </Row>
+
       <Table
         dataSource={data}
         loading={dataSource.isLoading}
@@ -147,8 +162,6 @@ function Timetable() {
           defaultPageSize: pageSize,
           pageSizeOptions: [5, 10, 15],
           total: dataSource.total,
-          // page,
-          // showLessItems: true,
           showSizeChanger: true,
           onChange: onPageChange,
         }}
@@ -203,7 +216,7 @@ function Timetable() {
           }}
         />
       </Table>
-    </div>
+    </TableWrapper>
   );
 }
 

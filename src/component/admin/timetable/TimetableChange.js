@@ -7,6 +7,7 @@ import { useHistory, useParams } from "react-router";
 import { TimetableChangeWrapper } from "./style";
 import apis from "../../../redux/apis";
 import { addTimetable, changeTimetable } from "../../../redux/actions/timtable";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: {
@@ -86,11 +87,10 @@ function TimetableChange() {
         courseId: "",
         shift: "",
         dayOfWeek: "",
-      })
+      });
     } else {
       delete values.id;
       changeTimetable(parseInt(id), values);
-    
     }
   };
 
@@ -107,9 +107,12 @@ function TimetableChange() {
   };
   return (
     <TimetableChangeWrapper>
-      <Button onClick={onGoBack}>Back</Button>
+      <Button onClick={onGoBack} className="btn-back">
+        <ArrowLeftOutlined />
+      </Button>
+
       <Col span={16} offset={4}>
-        <Row>
+        <Row className="title-change">
           {change === "add" ? "Thêm thời khóa biểu" : "Sửa thời khóa biểu"}
         </Row>
         <Form

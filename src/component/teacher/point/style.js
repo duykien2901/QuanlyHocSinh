@@ -14,13 +14,27 @@ export const PointWrapper = styled.div`
   .ant-row {
     margin: 24px !important;
 
-    .table-wrapper {
+    /* .table-wrapper {
       min-height: 400px;
       box-shadow: 0 2px 4px rgb(0 0 0 / 30%);
-    }
+      opacity: ${(props) => (props.opacity ? 0.1 : 1)};
+    } */
+
     .filter-btn {
       display: flex;
+      margin-bottom: 15px;
       justify-content: flex-end;
+      align-items: center;
+      height: 50px;
+
+      .filter-input {
+        width: auto;
+        border: none;
+        border-bottom: 1px solid;
+        margin-right: 10px;
+        color: rgb(0 0 0 / 51%);
+        background-color: #f9f9f9;
+      }
     }
   }
 `;
@@ -37,4 +51,10 @@ export const FormWrapper = styled(Form)`
     display: flex;
     justify-content: space-between;
   }
+`;
+
+export const TableWrapper = styled.div`
+  min-height: 400px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 30%);
+  opacity: ${(props) => (props.opacity ? 0.1 : 1)};
 `;

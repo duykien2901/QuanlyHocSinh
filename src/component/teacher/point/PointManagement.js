@@ -17,7 +17,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useState } from "react/cjs/react.development";
-import { FormWrapper, PointWrapper } from "./style";
+import { FormWrapper, PointWrapper, TableWrapper } from "./style";
 
 const layout = {
   labelCol: {
@@ -84,6 +84,7 @@ function PointManagement() {
   const [course, setCourse] = useState([]);
   const [classroom, setClassroom] = useState([]);
   const [student, setStudent] = useState([]);
+  const [visiblePopover, setVisiblePopover] = useState(false);
   const [form] = useForm();
   useEffect(() => {
     axios.get(`/api/grade/teacher?classroomId=1&courseId=1`, {
@@ -113,6 +114,9 @@ function PointManagement() {
     values.student && console.log(values);
   };
 
+  const onVisibleChange = () => {
+    setVisiblePopover(!visiblePopover);
+  };
   const renderSelectForm = () => {
     return (
       <FormWrapper
@@ -121,8 +125,6 @@ function PointManagement() {
         form={form}
         layout="vertical"
       >
-        <span>Thong tin</span>
-
         <Form.Item
           label="Course"
           key="course"
@@ -189,20 +191,28 @@ function PointManagement() {
       <Row gutter={[32, 32]}>
         {/* <Col span={6}>{renderSelectForm()}</Col> */}
 
-        <Col span={24}>
+        <Col span={24} className="wrapper" sketon={true}>
           <div className="filter-btn">
+            <Input
+              disabled
+              value={"ss"}
+              className="filter-input"
+              suffix={<FilterOutlined />}
+            />
             <Popover
               placement={"leftBottom"}
               title={<span>Thong tin</span>}
               content={renderSelectForm()}
               trigger="click"
+              visible={visiblePopover}
+              onVisibleChange={onVisibleChange}
             >
               <Button type="primary" icon={<FilterOutlined />}>
                 Filter
               </Button>
             </Popover>
           </div>
-          <div className="table-wrapper">
+          <TableWrapper className="table-wrapper" opacity={visiblePopover}>
             <Table bordered>
               <Column
                 align="center"
@@ -229,14 +239,14 @@ function PointManagement() {
 
               <Column
                 align="center"
-                title="Mid term Test"
+                title="Mid Test"
                 dataIndex="midTermTest"
                 key="mid_term_test"
               />
 
               <Column
                 align="center"
-                title="Final term test"
+                title="Final test"
                 dataIndex="	finalTermTest"
                 key="final_term_test"
               />
@@ -264,7 +274,7 @@ function PointManagement() {
 
               <Column align="center" title="Test" dataIndex="test" key="test" />
             </Table>
-          </div>
+          </TableWrapper>
         </Col>
       </Row>
     </PointWrapper>

@@ -111,7 +111,7 @@ export const ContentWrapper = styled(Content)`
 
       .ant-picker-panel {
         padding: 10px;
-        border-radius: 8px;
+        border-radius: 15px;
 
         .ant-picker-calendar-date-content {
           overflow: hidden;
