@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Input, Form, Button, Select } from "antd";
+import { SaveOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_SCREEN, EDIT_SCREEN } from "../devices/constant";
 import { addAccountUser, changeAccountUser } from "../../../redux/actions/auth";
@@ -83,6 +84,7 @@ function AccountChange({
       validateMessages={validateMessages}
       onFinish={onFinish}
       layout="vertical"
+      className="form-change-modal"
     >
       {screen === EDIT_SCREEN && (
         <Form.Item
@@ -140,11 +142,13 @@ function AccountChange({
           </Option>
         </Select>
       </Form.Item>
-      <Form.Item>
-        <Button htmlType="submit" type="primary">
-          {screen === ADD_SCREEN ? "Add" : "Edit"}
+      <div className="btn-submit">
+        <Button type="primary" htmlType="submit">
+          <SaveOutlined />
+          {/* {isAddingScreen ? "Add Timetable" : "Save Timetable"} */}
+          Save
         </Button>
-      </Form.Item>
+      </div>
     </Form>
   );
 }

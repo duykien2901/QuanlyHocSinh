@@ -1,4 +1,4 @@
-import { Button, Table, Space, Modal } from "antd";
+import { Button, Table, Space, Modal, Row } from "antd";
 import Column from "antd/lib/table/Column";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,9 @@ import swal from "sweetalert";
 import AccountChange from "./AccountChange";
 import { ADD_SCREEN, EDIT_SCREEN } from "../devices/constant";
 import { Link } from "react-router-dom";
+import { AccountWrapper } from "./style";
+import { PlusOutlined } from "@ant-design/icons";
+import { ModalWrapper } from "../devices/style";
 
 function Account() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -78,7 +81,7 @@ function Account() {
   };
 
   const renderModalAccount = () => (
-    <Modal
+    <ModalWrapper
       visible={onShowModalAccount}
       title="List Person Borrow"
       centered
@@ -102,21 +105,34 @@ function Account() {
           onCloseModalAccount={onCloseModalAccount}
         />
       )}
-    </Modal>
+    </ModalWrapper>
   );
   return (
-    <div
+    <AccountWrapper
       style={{
-        margin: "24px",
+        margin: "50px 24px 24px",
         minHeight: 360,
         height: "100%",
         backgroundColor: "#fff",
       }}
     >
       {renderModalAccount()}
-      <Button type="primary" onClick={onShowAddAccount}>
-        Add
-      </Button>
+      <div className="title">
+        <div className="title-device">Table Account</div>
+        <div className="comment">Here is a subtitle for this table</div>
+      </div>
+
+      <Row
+        justify="end"
+        style={{
+          padding: "80px 24px 0px 24px",
+        }}
+      >
+        <Button type="primary" onClick={onShowAddAccount} className="add-btn">
+          <PlusOutlined />
+          Add
+        </Button>
+      </Row>
       <Table
         dataSource={renderDataSource()}
         loading={accountList.isLoading}
@@ -187,7 +203,7 @@ function Account() {
           }}
         />
       </Table>
-    </div>
+    </AccountWrapper>
   );
 }
 

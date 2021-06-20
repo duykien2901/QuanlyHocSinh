@@ -19,14 +19,62 @@ export const TimetableChangeWrapper = styled(Row)`
       justify-content: center;
       align-items: center;
       margin: 10px 25px;
+      box-shadow: 0 3px 1px -2px rgb(0 0 0 / 0%), 0 2px 2px 0 rgb(0 0 0 / 14%),
+        0 1px 5px 0 rgb(0 0 0 / 14%);
     }
 
-    .title-change {
-      display: flex;
-      justify-content: center;
-      margin: 20px;
+    .content {
+      padding: 10px 20px 30px;
+      margin-top: 50px;
+      box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 14%),
+        0px 1px 1px 0px rgb(0 0 0 / 15%), 0px 1px 3px 0px rgb(0 0 0 / 32%);
+      border-radius: 5px;
 
-      font-size: 28px;
+      .title-change {
+        display: flex;
+        justify-content: center;
+        margin: 20px 20px 30px;
+
+        font-size: 28px;
+      }
+
+      .form-item {
+        padding-left: 10%;
+
+        .ant-form-item {
+          margin-bottom: 35px;
+
+          .ant-select-selector {
+            height: 45px;
+            align-items: center;
+            font-size: 16px;
+            border-radius: 4px;
+          }
+        }
+
+        label {
+          font-size: 17px;
+        }
+
+        input {
+          height: 45px;
+          border-radius: 4px;
+        }
+      }
+      .btn-submit {
+        display: flex;
+        justify-content: center;
+        margin: 30px;
+
+        button {
+          font-size: 17px;
+          height: auto;
+          border-radius: 5px;
+          padding: 10px 20px;
+          box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+            0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+        }
+      }
     }
   }
 `;

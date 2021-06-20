@@ -8,10 +8,10 @@ import { FormAccountWrapper } from "./style";
 import { useParams } from "react-router";
 const layout = {
   labelCol: {
-    span: 0,
+    span: 8,
   },
   wrapperCol: {
-    span: 24,
+    span: 16,
   },
 };
 
@@ -141,7 +141,7 @@ function ChangeAccountInfor({ personalInfor, updatePersonalInfor }) {
                 },
               ]}
             >
-              <Input disabled />
+              <Input allowClear disabled />
             </Form.Item>
           )}
           <Form.Item
@@ -186,7 +186,7 @@ function ChangeAccountInfor({ personalInfor, updatePersonalInfor }) {
               },
             ]}
           >
-            <DatePicker onChange={onChange} format={dateFormat} />
+            <DatePicker onChange={onChange} format={dateFormat} allowClear />
           </Form.Item>
         </Col>
 

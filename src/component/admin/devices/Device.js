@@ -1,4 +1,4 @@
-import { Button, Table, Space } from "antd";
+import { Button, Table, Space, Row } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import Column from "antd/lib/table/Column";
 import React, { useState, useEffect } from "react";
@@ -14,6 +14,8 @@ import swal from "sweetalert";
 import { ADD_SCREEN, BORROW_SCREEN, EDIT_SCREEN } from "./constant";
 import DeviceChange from "./DeviceChange";
 import PersonBorrowDevice from "./PersonBorrowDevice";
+import { DeviceWrapper, ModalWrapper } from "./style";
+import { PlusOutlined } from "@ant-design/icons";
 function Device() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -105,15 +107,19 @@ function Device() {
   };
 
   return (
-    <div
+    <DeviceWrapper
       style={{
-        margin: "24px",
+        margin: "50px 24px 24px",
         minHeight: 360,
         height: "100%",
         backgroundColor: "#fff",
       }}
     >
-      <Modal
+      <div className="title">
+        <div className="title-device">Table Device</div>
+        <div className="comment">Here is a subtitle for this table</div>
+      </div>
+      <ModalWrapper
         visible={onShowModalBorrow}
         title="List Person Borrow"
         centered
@@ -139,12 +145,19 @@ function Device() {
             onCloseModal={onCloseModalAfterUpdate}
           />
         )}
-      </Modal>
+      </ModalWrapper>
 
-      <Button type="primary" onClick={onAddDevice}>
-        Add
-      </Button>
-
+      <Row
+        justify="end"
+        style={{
+          padding: "80px 24px 0px 24px",
+        }}
+      >
+        <Button type="primary" onClick={onAddDevice} className="add-btn">
+          <PlusOutlined />
+          Add
+        </Button>
+      </Row>
       <Table
         size="large"
         dataSource={dataSource}
@@ -215,7 +228,7 @@ function Device() {
         />
       </Table>
       <button onClick={onClick}>a</button>
-    </div>
+    </DeviceWrapper>
   );
 }
 

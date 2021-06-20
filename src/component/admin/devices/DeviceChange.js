@@ -1,4 +1,5 @@
 import { Input, Form, Button, Select } from "antd";
+import { SaveOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addDevice, changeDevice } from "../../../redux/actions/device";
@@ -72,9 +73,7 @@ function DeviceChange({ screen, deviceId, resetDeviceField, onCloseModal }) {
       validateMessages={validateMessages}
       onFinish={onFinish}
       layout="vertical"
-      // initialValues={{
-      //   deviceName: screen === EDIT_SCREEN ? deviceName : "",
-      // }}
+      className="form-change-modal"
     >
       <Form.Item
         label="Device Name"
@@ -108,11 +107,13 @@ function DeviceChange({ screen, deviceId, resetDeviceField, onCloseModal }) {
         </Select>
       </Form.Item>
 
-      <Form.Item {...tailLayout}>
+      <div className="btn-submit">
         <Button type="primary" htmlType="submit">
-          {screen === ADD_SCREEN ? "Add" : "Edit"}
+          <SaveOutlined />
+          {/* {isAddingScreen ? "Add Timetable" : "Save Timetable"} */}
+          Save
         </Button>
-      </Form.Item>
+      </div>
     </Form>
   );
 }

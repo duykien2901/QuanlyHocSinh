@@ -6,8 +6,8 @@ const formatDate = (datePicker) => {
   newDate =
     year +
     "/" +
-    `${month > 9 ? "" : "0"}` +
-    month +
+    `${month + 1 > 9 ? "" : "0"}` +
+    `${month + 1}` +
     "/" +
     `${date > 9 ? "" : "0"}` +
     date;
