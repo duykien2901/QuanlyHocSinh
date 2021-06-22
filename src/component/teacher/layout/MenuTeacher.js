@@ -10,7 +10,7 @@ import {
   Calendar,
 } from "antd";
 import { ScheduleOutlined, HomeOutlined } from "@ant-design/icons";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faTools } from "@fortawesome/free-solid-svg-icons";
 import { SiderWrapper, HeaderWrapper, ContentWrapper } from "./style";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -117,12 +117,14 @@ function MenuTeacher({ children }) {
           >
             <Link to="/teacher/point">Point management</Link>
           </Menu.Item>
-          {/* <Menu.Item
-            key={`/student/timetable/${accountId}`}
-            icon={<ScheduleOutlined />}
+          <Menu.Item
+            key={"/teacher/device"}
+            icon={
+              <FontAwesomeIcon icon={faTools} style={{ fontSize: "20px" }} />
+            }
           >
-            <Link to={`/student/timetable/${accountId}`}>Timetable</Link>
-          </Menu.Item> */}
+            <Link to={`/teacher/device`}>Device</Link>
+          </Menu.Item>
           {/* <Menu.Item
             key="/admin/device"
             icon={<FontAwesomeIcon icon={faHammer} />}

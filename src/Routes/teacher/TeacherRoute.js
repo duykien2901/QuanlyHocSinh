@@ -6,6 +6,7 @@ import MenuTeacher from "../../component/teacher/layout/MenuTeacher";
 const PointManagement = lazy(() =>
   import("../../component/teacher/point/PointManagement")
 );
+const Device = lazy(() => import("../../component/teacher/device/Device"));
 
 export default function TeacherRoute() {
   const { path } = useRouteMatch();
@@ -16,6 +17,7 @@ export default function TeacherRoute() {
         <Switch>
           <Route exact path={`${path}`} component={""} />
           <Route exact path={`${path}/point`} component={PointManagement} />
+          <Route exact path={`${path}/device`} component={Device} />
         </Switch>
       </Suspense>
     </MenuTeacher>

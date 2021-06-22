@@ -9,6 +9,7 @@ import {
   Row,
   Select,
   Table,
+  Space,
 } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import Column from "antd/lib/table/Column";
@@ -84,12 +85,14 @@ function PointManagement() {
   const [course, setCourse] = useState([]);
   const [classroom, setClassroom] = useState([]);
   const [student, setStudent] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [visiblePopover, setVisiblePopover] = useState(false);
   const [form] = useForm();
   useEffect(() => {
-    axios.get(`/api/grade/teacher?classroomId=1&courseId=1`, {
-      headers: { Authorization: `Bearer ` + localStorage.getItem("token") },
-    });
+    // axios.get(`/api/grade/teacher?classroomId=1&courseId=1`, {
+    //   headers: { Authorization: `Bearer ` + localStorage.getItem("token") },
+    // });
   }, []);
   useEffect(() => {
     setCourse(fetchData);
@@ -102,7 +105,8 @@ function PointManagement() {
   }, []);
 
   const onChange = (e, value) => {
-    let courseSelect = fetchData.find((item) => item.courseName === e);
+    console.log(e, value);
+    let courseSelect = fetchData.find((item) => item.id === e);
     setClassroom(courseSelect.classroomEntities);
   };
 
@@ -116,6 +120,16 @@ function PointManagement() {
 
   const onVisibleChange = () => {
     setVisiblePopover(!visiblePopover);
+  };
+
+  const onTableChange = (pagination, filters, sorter) => {
+    if (currentPage != pagination.current || pageSize != pagination.pageSize) {
+      setCurrentPage(pagination.current);
+      setPageSize(pagination.pageSize);
+    }
+
+    // let sort = sorter.order === "ascend" ? true : false;
+    // sorter.order && dispatch(getPageDeviceSorting(currentPage, pageSize, sort));
   };
   const renderSelectForm = () => {
     return (
@@ -133,7 +147,7 @@ function PointManagement() {
         >
           <Select onChange={onChange} placeholder="select Course">
             {course.map((item) => (
-              <Option key={item.id} value={item.courseName}>
+              <Option key={item.id} value={item.id}>
                 {item.courseName}
               </Option>
             ))}
@@ -148,7 +162,7 @@ function PointManagement() {
         >
           <Select onChange={classChange} placeholder="select classroom">
             {classroom.map((item) => (
-              <Option key={item.id} value={item.classroomName}>
+              <Option key={item.id} value={item.id}>
                 {item.classroomName}
               </Option>
             ))}
@@ -169,7 +183,7 @@ function PointManagement() {
             }
           >
             {student.map((item) => (
-              <Option key={item.id} value={item.studentName}>
+              <Option key={item.id} value={item.id}>
                 {item.studentName}
               </Option>
             ))}
@@ -191,7 +205,7 @@ function PointManagement() {
       <Row gutter={[32, 32]}>
         {/* <Col span={6}>{renderSelectForm()}</Col> */}
 
-        <Col span={24} className="wrapper" sketon={true}>
+        <Col span={24} className="wrapper">
           <div className="filter-btn">
             <Input
               disabled
@@ -213,7 +227,17 @@ function PointManagement() {
             </Popover>
           </div>
           <TableWrapper className="table-wrapper" opacity={visiblePopover}>
-            <Table bordered>
+            <Table
+              bordered
+              pagination={{
+                defaultCurrent: currentPage,
+                defaultPageSize: pageSize,
+                pageSizeOptions: [5, 10, 15],
+                // total: devices.total,
+                showSizeChanger: true,
+              }}
+              onChange={onTableChange}
+            >
               <Column
                 align="center"
                 title="Student"
@@ -273,6 +297,24 @@ function PointManagement() {
               />
 
               <Column align="center" title="Test" dataIndex="test" key="test" />
+              <Column
+                align="center"
+                title="Action"
+                key="action"
+                render={(text, record) => {
+                  return (
+                    <Space size="middle">
+                      <Button
+                        type="primary"
+                        ghost
+                        // onClick={() => onEditAccount(record.id)}
+                      >
+                        Edit
+                      </Button>
+                    </Space>
+                  );
+                }}
+              />
             </Table>
           </TableWrapper>
         </Col>
